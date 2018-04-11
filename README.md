@@ -1,3 +1,16 @@
+
+- auto add webhook
+- auto add labels in progress, ready for review, rejected, review requested
+- auto remove in progress when ready for review or rejected
+- auto remove in progress and add ready for review when review requested
+- auto remove in progress, ready for review, review requested when closed
+- auto assign when fixes in a PR
+
+```shell
+bundle install
+bundle exec dotenv shotgun -p 4567
+```
+
 # basics-of-authentication
 
 This is the sample project built by following the "[Basics of Authentication][basics of auth]"
