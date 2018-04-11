@@ -1,3 +1,8 @@
+```shell
+bundle install
+bundle exec dotenv shotgun -p 4567
+```
+
 # basics-of-authentication
 
 This is the sample project built by following the "[Basics of Authentication][basics of auth]"
