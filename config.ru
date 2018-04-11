@@ -1,2 +1,2 @@
-require './advanced_server'
+require './server'
 run Sinatra::Application
