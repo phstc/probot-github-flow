@@ -102,7 +102,6 @@ class GitHub
       action = payload["action"]
 
       body = if action == "closed"
-               remove_label(id, IN_PROGRESS)
                remove_pr_reference(number, issue)
              else
                client.add_assignees(repo_full_name, id, [payload["pull_request"]["user"]["login"]])
@@ -146,7 +145,6 @@ class GitHub
 
   def reject_issue(payload)
     find_fixable_issue_ids(payload["pull_request"]["body"]).each do |id|
-      remove_label(id, READY_FOR_REVIEW)
       add_label(id, REJECTED)
     end
   end
