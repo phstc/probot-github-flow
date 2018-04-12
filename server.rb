@@ -35,7 +35,7 @@ end
 def list_repos(token)
   client = Octokit::Client.new(access_token: token)
 
-  ["woodmont/capital", "woodmont/listings", "phstc/putslabel"].each do |repo|
+  ["woodmont/capital", "woodmont/listings", "phstc/putslabel", "phstc/crosshero"].each do |repo|
     client.create_hook(
       repo,
       "web",
