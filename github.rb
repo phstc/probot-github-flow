@@ -105,7 +105,7 @@ class GitHub
                remove_pr_reference(number, issue)
              else
                client.add_assignees(repo_full_name, id, [payload["pull_request"]["user"]["login"]])
-               add_label(id, IN_PROGRESS)
+               add_in_progress(issue)
                add_pr_reference(action, number, issue)
              end
 
@@ -113,6 +113,12 @@ class GitHub
 
       client.update_issue(repo_full_name, id, issue["title"], body)
     end
+  end
+
+  def add_in_progress(issue)
+    return if issue['labels'].any? { |label| label['name'] == READY_FOR_REVIEW }
+
+    add_label(issue['number'], IN_PROGRESS)
   end
 
   def close_referenced_issues(payload)
