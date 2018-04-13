@@ -36,20 +36,23 @@ def list_repos(token)
   client = Octokit::Client.new(access_token: token)
 
   ["woodmont/capital", "woodmont/listings", "phstc/putslabel", "phstc/crosshero"].each do |repo|
-    client.create_hook(
-      repo,
-      "web",
-      {
-        url: "https://putslabel.herokuapp.com/webhook",
-        content_type: "json",
-      },
-      {
-        events: ["issues", "status", "pull_request_review", "push", "pull_request"],
-        active: true,
-      }
-    )
+    begin
+      client.create_hook(
+        repo,
+        "web",
+        {
+          url: "https://putslabel.herokuapp.com/webhook",
+          content_type: "json",
+        },
+        {
+          events: ["issues", "status", "pull_request_review", "push", "pull_request"],
+          active: true,
+        }
+      )
+    rescue Octokit::UnprocessableEntity => e
+      puts e
+    end
   end
-rescue Octokit::UnprocessableEntity
 end
 
 get "/" do
