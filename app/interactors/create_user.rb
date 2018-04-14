@@ -1,9 +1,10 @@
+class CreateUser
+  include InteractorHelpers
 
-class CreateHooks
   attr_reader :context
 
   class << self
-    def call!(context)
+    def call!(context = {})
       new(context).call
     end
   end
@@ -20,6 +21,8 @@ class CreateHooks
     )
 
     context.access_token = JSON.parse(result)['access_token']
+
+    context.user = client.user
 
     context
   end

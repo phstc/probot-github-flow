@@ -1,11 +1,13 @@
 class CreateHooks
+  include InteractorHelpers
+
   attr_reader :context
 
   REPOS = ['woodmont/capital', 'woodmont/listings', 'phstc/putslabel', 'phstc/crosshero'].freeze
   WEBHOOK_URL = 'https://putslabel.herokuapp.com/webhook'.freeze
 
   class << self
-    def call!(context)
+    def call!(context = {})
       new(context).call
     end
   end
@@ -32,11 +34,5 @@ class CreateHooks
     end
 
     context
-  end
-
-  private
-
-  def client
-    @_client = Octokit::Client.new(access_token: context.access_token)
   end
 end

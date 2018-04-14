@@ -4,8 +4,9 @@ require 'rest_client'
 require 'json'
 require 'octokit'
 require './github'
+require './app/interactors/interactor_helpers'
 require './app/interactors/create_hooks'
-require './app/interactors/create_users'
+require './app/interactors/create_user'
 require './app/interactors/get_oauth_url'
 
 Bundler.require(:default, ENV['RACK_ENV'] || 'development')
@@ -24,7 +25,7 @@ def authenticated?
 end
 
 def authenticate!
-  oauth_url = GetOauthURL.call!.oauth_url
+  oauth_url = GetOauthURL.call!(client_id: CLIENT_ID).oauth_url
 
   erb :login, locals: { oauth_url: oauth_url }
 end
@@ -36,7 +37,10 @@ get '/' do
 
   CreateHooks.call!(access_token: access_token)
 
-  erb :index, locals: { access_token: access_token }
+  client = Octokit::Client.new(access_token: access_token)
+
+
+  erb :index, locals: { user: client.user.to_h, access_token: access_token }
 end
 
 post '/webhook' do

@@ -8,7 +8,7 @@ class GetOauthURL
   attr_reader :context
 
   class << self
-    def call!(context)
+    def call!(context = {})
       new(context).call
     end
   end
