@@ -3,15 +3,21 @@ module Webhooks
     include Interactor
     include InteractorHelpers
 
-    def_delegators :context, :payload, :repo_full_name
+    def_delegators :context, :payload, :repo_full_name, :access_token
 
     def call
       case payload['review']['state']
       when 'changes_requested'
-        HandlePullRequestReviewStateChangesRequested.call!(payload: payload, repo_full_name: repo_full_name)
+        HandlePullRequestReviewStateChangesRequested
       when 'approved'
-        HandlePullRequestReviewStateApproved.call!(payload: payload, repo_full_name: repo_full_name)
+        HandlePullRequestReviewStateApproved
       end
+
+      executor&.call!(
+        payload: payload,
+        repo_full_name: repo_full_name,
+        access_token: access_token
+      )
     end
   end
 end

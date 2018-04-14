@@ -19,7 +19,7 @@ module Webhooks
                    Webhooks::HandleIssues
                  end
 
-      executor.call!(access_token: access_token, payload: payload, repo_full_name: repo_full_name)
+      executor&.call!(access_token: access_token, payload: payload, repo_full_name: repo_full_name)
     end
   end
 end
