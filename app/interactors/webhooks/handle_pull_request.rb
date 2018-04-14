@@ -44,11 +44,9 @@ module Webhooks
 
       id = issue['number']
 
-      AddLabelToAnIssue.call!(
-        repo_full_name: repo_full_name,
-        id: id,
-        label: Constants::IN_PROGRESS,
-        access_token: access_token
+      add_label_to_an_issue(
+        id,
+        Constants::IN_PROGRESS
       )
     end
 

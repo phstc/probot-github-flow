@@ -25,11 +25,8 @@ module Webhooks
     def close_referenced_issues(id)
       client.close_issue(repo_full_name, id)
 
-      RemoveLabel.call!(
-        repo_full_name: repo_full_name,
-        id: id,
-        label: [Constants::IN_PROGRESS, Constants::READY_FOR_REVIEW, Constants::REVIEW_REQUESTED, Constants::REJECTED]
-      )
+      remove_label(id,
+                   [Constants::IN_PROGRESS, Constants::READY_FOR_REVIEW, Constants::REVIEW_REQUESTED, Constants::REJECTED])
     end
 
     def remove_pr_reference(number, issue)

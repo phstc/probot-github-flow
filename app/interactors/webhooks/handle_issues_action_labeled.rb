@@ -3,7 +3,7 @@ module Webhooks
     include Interactor
     include InteractorHelpers
 
-    def_delegators :context, :payload, :repo_full_name, :access_token
+    def_delegators :context, :payload
 
     def call
       id = payload['issue']['number']
@@ -17,26 +17,6 @@ module Webhooks
         remove_label(id, Constants::IN_PROGRESS)
         add_label_to_an_issue(id, Constants::READY_FOR_REVIEW)
       end
-    end
-
-    private
-
-    def remove_label(id, label)
-      RemoveLabel.call!(
-        repo_full_name: repo_full_name,
-        id: id,
-        label: label,
-        access_token: access_token
-      )
-    end
-
-    def add_label_to_an_issue(id, label)
-      AddLabelToAnIssue.call!(
-        repo_full_name: repo_full_name,
-        id: id,
-        label: label,
-        access_token: access_token
-      )
     end
   end
 end
