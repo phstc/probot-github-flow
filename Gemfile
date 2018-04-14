@@ -9,6 +9,7 @@ gem 'octokit',     '~> 4.0'
 group :development do
   gem 'shotgun'
   gem 'dotenv'
+  gem 'rubocop'
 end
 
 group :development, :test do
