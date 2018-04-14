@@ -6,14 +6,9 @@ require 'octokit'
 require './github'
 require './app/interactors/create_hooks'
 require './app/interactors/create_users'
+require './app/interactors/get_oauth_url'
 
 Bundler.require(:default, ENV['RACK_ENV'] || 'development')
-
-SCOPES = [
-  'user:email',
-  'repo',
-  'write:repo_hook'
-].freeze
 
 CLIENT_ID = ENV['GH_BASIC_CLIENT_ID']
 CLIENT_SECRET = ENV['GH_BASIC_SECRET_ID']
@@ -29,9 +24,9 @@ def authenticated?
 end
 
 def authenticate!
-  oauth_url = "https://github.com/login/oauth/authorize?scope=#{SCOPES.join(',')}&client_id=#{CLIENT_ID}"
+  oauth_url = GetOauthURL.call!.oauth_url
 
-  erb :index, locals: { oauth_url: oauth_url }
+  erb :login, locals: { oauth_url: oauth_url }
 end
 
 get '/' do
@@ -41,7 +36,7 @@ get '/' do
 
   CreateHooks.call!(access_token: access_token)
 
-  erb :advanced, locals: { access_token: access_token }
+  erb :index, locals: { access_token: access_token }
 end
 
 post '/webhook' do
@@ -53,7 +48,11 @@ end
 get '/callback' do
   session_code = request.env['rack.request.query_hash']['code']
 
-  session[:access_token] = CreateUser.call!(session_code: session_code, client_id: CLIENT_ID, client_secret: CLIENT_SECRET)
+  session[:access_token] = CreateUser.call!(
+    session_code: session_code,
+    client_id: CLIENT_ID,
+    client_secret: CLIENT_SECRET
+  ).access_token
 
   redirect '/'
 end
