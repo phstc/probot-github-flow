@@ -6,11 +6,12 @@ require 'octokit'
 require 'interactor'
 require './constants'
 require './app/interactors/interactor_helpers'
-require './app/interactors/remove_label'
+require './app/interactors/webhooks/handle_webhookG'
 require './app/interactors/webhooks/find_fixable_issues'
 require './app/interactors/webhooks/handle_issues'
 require './app/interactors/webhooks/handle_pull_request_review'
 require './app/interactors/webhooks/handle_pull_request'
+require './app/interactors/remove_label'
 require './app/interactors/add_label_to_an_issue'
 require './app/interactors/setup_labels'
 require './app/interactors/webhooks/handle_issues'
@@ -53,8 +54,11 @@ get '/' do
 end
 
 post '/webhook' do
-  github = GitHub.new(ACCESS_TOKEN)
-  github.handle_github(request.env['HTTP_X_GITHUB_EVENT'], JSON.parse(request.body.read))
+  Webhooks::HandleWebhook.call!(
+    access_token: ACCESS_TOKEN,
+    type: request.env['HTTP_X_GITHUB_EVENT'],
+    payload: JSON.parse(request.body.read)
+  )
   status 200
 end
 
