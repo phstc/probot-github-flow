@@ -6,11 +6,12 @@ module Webhooks
     def_delegators :context, :payload
 
     def call
-      if %w[opened edited closed reopened].include?(payload['action'])
+      case payload['action']
+      when 'closed'
+        HandlePullRequestActionClosed.call!(payload: payload)
+      when 'opened', 'edited', 'reopened'
         update_referenced_issues_desc(payload)
-
-        close_referenced_issues(payload) if payload['action'] == 'closed' && payload['pull_request']['merged'].to_s == 'true'
-      elsif payload['action'] == 'review_requested'
+      when 'review_requested'
         HandlePullRequestActionReviewRequested.call!(payload: payload)
       end
     end
@@ -25,14 +26,9 @@ module Webhooks
 
         action = payload['action']
 
-        body = \
-          if action == 'closed'
-            remove_pr_reference(number, issue)
-          else
-            client.add_assignees(repo_full_name, id, [payload['pull_request']['user']['login']])
-            add_in_progress(issue)
-            add_pr_reference(action, number, issue)
-          end
+        client.add_assignees(repo_full_name, id, [payload['pull_request']['user']['login']])
+        add_in_progress(issue)
+        body = add_pr_reference(action, number, issue)
 
         next unless body
 
@@ -46,23 +42,6 @@ module Webhooks
       id = issue['number']
 
       AddLabelToAnIssue.call!(repo_full_name: repo_full_name, id: id, label: Constants::IN_PROGRESS)
-    end
-
-    def close_referenced_issues(payload)
-      Webhooks::FindFixableIssues.call!(payload['pull_request']['body']).ids.each do |id|
-        client.close_issue(repo_full_name, id)
-
-        RemoveLabel.call!(
-          repo_full_name: repo_full_name,
-          id: id,
-          label: [Constants::IN_PROGRESS, Constants::READY_FOR_REVIEW, Constants::REVIEW_REQUESTED, Constants::REJECTED]
-        )
-      end
-    end
-
-    def remove_pr_reference(number, issue)
-      body = issue['body'].to_s
-      body.gsub("**PR:** ##{number}", "<strike>**PR:** ##{number}</strike>")
     end
 
     def add_pr_reference(action, number, issue)
