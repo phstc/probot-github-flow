@@ -4,11 +4,13 @@ require 'rest_client'
 require 'json'
 require 'octokit'
 require 'interactor'
-require './github'
+require './app/remove_label'
+require './app/add_label_to_an_issue'
 require './app/interactors/interactor_helpers'
 require './app/interactors/create_hooks'
 require './app/interactors/create_user'
 require './app/interactors/get_oauth_url'
+require './github'
 
 Bundler.require(:default, ENV['RACK_ENV'] || 'development')
 

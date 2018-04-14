@@ -40,23 +40,22 @@ class GitHub
     id = payload['issue']['number']
 
     if payload['action'] == 'labeled'
-      remove_label(id, IN_PROGRESS) if payload.dig('label', 'name') == READY_FOR_REVIEW
+      if payload.dig('label', 'name') == READY_FOR_REVIEW
+        RemoveLabel.call!(repo_full_name: repo_full_name, id: id, label: IN_PROGRESS)
+      end
 
       if payload.dig('label', 'name') == REJECTED
-        remove_label(id, IN_PROGRESS)
-        remove_label(id, READY_FOR_REVIEW)
+        RemoveLabel.call!(repo_full_name: repo_full_name, id: id, label: [IN_PROGRESS, READY_FOR_REVIEW])
       end
 
       if payload.dig('label', 'name') == REVIEW_REQUESTED
-        remove_label(id, IN_PROGRESS)
-        add_label(id, READY_FOR_REVIEW)
+        RemoveLabel.call!(repo_full_name: repo_full_name, id: id, label: IN_PROGRESS)
+        AddLabelToAnIssue.call!(repo_full_name: repo_full_name, id: id, label: READY_FOR_REVIEW)
       end
     end
 
     if payload['action'] == 'closed'
-      remove_label(id, IN_PROGRESS)
-      remove_label(id, READY_FOR_REVIEW)
-      remove_label(id, REVIEW_REQUESTED)
+      RemoveLabel.call!(repo_full_name: repo_full_name, id: id, label: [IN_PROGRESS, READY_FOR_REVIEW, REVIEW_REQUESTED])
     end
   end
 
@@ -79,14 +78,6 @@ class GitHub
   end
 
   private
-
-  def remove_label(id, label)
-    client.remove_label(repo_full_name, id, label) rescue Octokit::NotFound
-  end
-
-  def add_label(id, label)
-    client.add_labels_to_an_issue(repo_full_name, id, [label])
-  end
 
   def update_referenced_issues_desc(payload)
     number = payload['pull_request']['number']
@@ -113,17 +104,20 @@ class GitHub
   def add_in_progress(issue)
     return if issue['labels'].any? { |label| label['name'] == READY_FOR_REVIEW }
 
-    add_label(issue['number'], IN_PROGRESS)
+    id = issue['number']
+
+    AddLabelToAnIssue.call!(repo_full_name: repo_full_name, id: id, label: IN_PROGRESS)
   end
 
   def close_referenced_issues(payload)
     find_fixable_issue_ids(payload['pull_request']['body']).each do |id|
       client.close_issue(repo_full_name, id)
 
-      remove_label(id, READY_FOR_REVIEW)
-      remove_label(id, REJECTED)
-      remove_label(id, REVIEW_REQUESTED)
-      remove_label(id, IN_PROGRESS)
+      RemoveLabel.call!(
+        repo_full_name: repo_full_name,
+        id: id,
+        label: [IN_PROGRESS, READY_FOR_REVIEW, REVIEW_REQUESTED, REJECTED]
+      )
     end
   end
 
@@ -146,19 +140,19 @@ class GitHub
 
   def reject_issue(payload)
     find_fixable_issue_ids(payload['pull_request']['body']).each do |id|
-      add_label(id, REJECTED)
+      AddLabelToAnIssue.call!(repo_full_name: repo_full_name, id: id, label: REJECTED)
     end
   end
 
   def review_requested_issue(payload)
     find_fixable_issue_ids(payload['pull_request']['body']).each do |id|
-      add_label(id, REVIEW_REQUESTED)
+      AddLabelToAnIssue.call!(repo_full_name: repo_full_name, id: id, label: REVIEW_REQUESTED)
     end
   end
 
   def remove_review_requested_issue(payload)
     find_fixable_issue_ids(payload['pull_request']['body']).each do |id|
-      remove_label(id, REVIEW_REQUESTED)
+      RemoveLabel.call!(repo_full_name: repo_full_name, id: id, label: REVIEW_REQUESTED)
     end
   end
 
