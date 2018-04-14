@@ -4,6 +4,8 @@ require 'rest_client'
 require 'json'
 require 'octokit'
 require './github'
+require './app/interactors/create_hooks'
+require './app/interactors/create_users'
 
 Bundler.require(:default, ENV['RACK_ENV'] || 'development')
 
@@ -32,31 +34,12 @@ def authenticate!
   erb :index, locals: { oauth_url: oauth_url }
 end
 
-def list_repos(token)
-  client = Octokit::Client.new(access_token: token)
-
-  ['woodmont/capital', 'woodmont/listings', 'phstc/putslabel', 'phstc/crosshero'].each do |repo|
-    client.create_hook(
-      repo,
-      'web',
-      {
-        url: 'https://putslabel.herokuapp.com/webhook',
-        content_type: 'json'
-      },
-      events: %w[issues status pull_request_review push pull_request],
-      active: true
-    )
-  rescue Octokit::UnprocessableEntity => e
-    puts e
-  end
-end
-
 get '/' do
   return authenticate! unless authenticated?
 
   access_token = session[:access_token]
 
-  list_repos(access_token)
+  CreateHooks.call!(access_token: access_token)
 
   erb :advanced, locals: { access_token: access_token }
 end
@@ -70,13 +53,7 @@ end
 get '/callback' do
   session_code = request.env['rack.request.query_hash']['code']
 
-  result = RestClient.post('https://github.com/login/oauth/access_token',
-                           { client_id: CLIENT_ID,
-                             client_secret: CLIENT_SECRET,
-                             code: session_code },
-                           accept: :json)
-
-  session[:access_token] = JSON.parse(result)['access_token']
+  session[:access_token] = CreateUser.call!(session_code: session_code, client_id: CLIENT_ID, client_secret: CLIENT_SECRET)
 
   redirect '/'
 end
