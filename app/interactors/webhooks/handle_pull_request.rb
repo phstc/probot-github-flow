@@ -11,7 +11,7 @@ module Webhooks
 
         close_referenced_issues(payload) if payload['action'] == 'closed' && payload['pull_request']['merged'].to_s == 'true'
       elsif payload['action'] == 'review_requested'
-        review_requested(payload)
+        HandlePullRequestActionReviewRequested.call!(payload: payload)
       end
     end
 
@@ -75,12 +75,6 @@ module Webhooks
       body += "\n" unless body.include?('**PR:**')
 
       body + "\n**PR:** ##{number}"
-    end
-
-    def review_requested(payload)
-      Webhooks::FindFixableIssues.call!(payload['pull_request']['body']).ids.each do |id|
-        AddLabelToAnIssue.call!(repo_full_name: repo_full_name, id: id, label: Constants::REVIEW_REQUESTED)
-      end
     end
   end
 end
