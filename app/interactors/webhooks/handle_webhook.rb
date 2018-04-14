@@ -8,7 +8,7 @@ module Webhooks
     def call
       repo_full_name = payload['repository']['full_name']
 
-      SetupLabels.call!(repo_full_name: repo_full_name)
+      SetupLabels.call!(repo_full_name: repo_full_name, access_token: access_token)
 
       executor = case type
                  when 'pull_request_review'

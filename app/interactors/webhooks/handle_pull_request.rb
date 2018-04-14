@@ -3,17 +3,20 @@ module Webhooks
     include Interactor
     include InteractorHelpers
 
-    def_delegators :context, :payload
+    def_delegators :context, :payload, :access_token
 
     def call
-      case payload['action']
-      when 'closed'
-        HandlePullRequestActionClosed.call!(payload: payload)
-      when 'opened', 'edited', 'reopened'
-        update_referenced_issues_desc(payload)
-      when 'review_requested'
-        HandlePullRequestActionReviewRequested.call!(payload: payload)
-      end
+      executor = case payload['action']
+                 when 'closed'
+                   HandlePullRequestActionClosed
+                 when 'opened', 'edited', 'reopened'
+                   update_referenced_issues_desc(payload)
+                   nil
+                 when 'review_requested'
+                   HandlePullRequestActionReviewRequested
+                 end
+
+      executor&.call!(payload: payload, repo_full_name: repo_full_name, access_token: access_token)
     end
 
     private
@@ -21,7 +24,7 @@ module Webhooks
     def update_referenced_issues_desc(payload)
       number = payload['pull_request']['number']
 
-      Webhooks::FindFixableIssues.call!(payload['pull_request']['body']).ids.each do |id|
+      Webhooks::FindFixableIssues.call!(body: payload['pull_request']['body']).ids.each do |id|
         issue = client.issue(repo_full_name, id)
 
         action = payload['action']
@@ -41,7 +44,12 @@ module Webhooks
 
       id = issue['number']
 
-      AddLabelToAnIssue.call!(repo_full_name: repo_full_name, id: id, label: Constants::IN_PROGRESS)
+      AddLabelToAnIssue.call!(
+        repo_full_name: repo_full_name,
+        id: id,
+        label: Constants::IN_PROGRESS,
+        access_token: access_token
+      )
     end
 
     def add_pr_reference(action, number, issue)
