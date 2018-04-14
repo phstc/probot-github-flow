@@ -10,21 +10,10 @@ class GitHub
     @client = Octokit::Client.new(access_token: access_token)
   end
 
-  def add_labels
-    [[READY_FOR_REVIEW, 'fef2c0'],
-     [REJECTED, 'e11d21'],
-     [REVIEW_REQUESTED, 'fef2c0'],
-     [IN_PROGRESS, '1d76db']].each do |label, color|
-
-      client.add_label(repo_full_name, label, color)
-    rescue Octokit::UnprocessableEntity
-    end
-  end
-
   def handle_github(type, payload)
     @repo_full_name = payload['repository']['full_name']
 
-    add_labels
+    SetupLabels.call!(repo_full_name: repo_full_name)
 
     case type
     when 'pull_request_review'
