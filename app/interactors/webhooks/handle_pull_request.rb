@@ -10,7 +10,7 @@ module Webhooks
         update_referenced_issues_desc(payload)
 
         close_referenced_issues(payload) if payload['action'] == 'closed' && payload['pull_request']['merged'].to_s == 'true'
-      elsif payload['action'] == 'Constants::REVIEW_REQUESTED'
+      elsif payload['action'] == 'review_requested'
         review_requested(payload)
       end
     end

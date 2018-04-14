@@ -3,7 +3,7 @@ module Webhooks
     include Interactor
     include InteractorHelpers
 
-    def_delegators :context, :payload
+    def_delegators :context, :payload, :repo_full_name
 
     def call
       id = payload['issue']['number']
