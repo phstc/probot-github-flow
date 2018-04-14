@@ -3,7 +3,7 @@ require 'spec_helper'
 module Webhooks
   RSpec.describe HandleIssuesActionLabeled do
     let(:issue) { File.read('./spec/fixtures/github/issue.json') }
-    let(:id) { issue['number'] }
+    let(:number) { issue['number'] }
     let(:repo_full_name) { 'octocat/Hello-World' }
     let(:payload) { { 'issue' => issue, 'label' => { 'name' => label } } }
     let(:access_token) { 'token' }
@@ -14,7 +14,7 @@ module Webhooks
 
         specify do
           expect(RemoveLabel).to receive(:call!).with(
-            id: id,
+            number: number,
             label: Constants::IN_PROGRESS,
             repo_full_name: repo_full_name,
             access_token: access_token
@@ -29,14 +29,14 @@ module Webhooks
 
         specify do
           expect(RemoveLabel).to receive(:call!).with(
-            id: id,
+            number: number,
             label: Constants::IN_PROGRESS,
             repo_full_name: repo_full_name,
             access_token: access_token
           )
 
           expect(AddLabelToAnIssue).to receive(:call!).with(
-            id: id,
+            number: number,
             label: Constants::READY_FOR_REVIEW,
             repo_full_name: repo_full_name,
             access_token: access_token
@@ -51,7 +51,7 @@ module Webhooks
 
         specify do
           expect(RemoveLabel).to receive(:call!).with(
-            id: id,
+            number: number,
             label: [Constants::IN_PROGRESS, Constants::READY_FOR_REVIEW],
             repo_full_name: repo_full_name,
             access_token: access_token

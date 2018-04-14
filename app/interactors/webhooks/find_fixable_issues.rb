@@ -8,7 +8,7 @@ module Webhooks
     def call
       matches = body.scan(/(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved)\s*(\#\d+|http.*\/\d+)/i)
 
-      context.ids = matches.map!(&:last).map! do |issue|
+      context.numbers = matches.map!(&:last).map! do |issue|
         if issue.start_with?('#') # #7631"
           issue.sub('#', '')
         else

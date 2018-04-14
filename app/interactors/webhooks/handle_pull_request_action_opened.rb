@@ -7,30 +7,28 @@ module Webhooks
     def_delegators :context, :payload, :access_token
 
     def call
-      each_fixable_issue(payload['pull_request']['body']) do |id|
-        issue = client.issue(repo_full_name, id)
+      each_fixable_issue(payload['pull_request']['body']) do |number|
+        issue = client.issue(repo_full_name, number)
 
         action = payload['action']
 
-        client.add_assignees(repo_full_name, id, [payload['pull_request']['user']['login']])
-        add_in_progress(issue)
+        client.add_assignees(repo_full_name, number, [payload['pull_request']['user']['login']])
+        add_in_progress_label(issue)
         body = add_pr_reference(action, issue)
 
         next unless body
 
-        client.update_issue(repo_full_name, id, issue['title'], body)
+        client.update_issue(repo_full_name, number, issue['title'], body)
       end
     end
 
     private
 
-    def add_in_progress(issue)
+    def add_in_progress_label(issue)
       return if issue['labels'].any? { |label| label['name'] == Constants::READY_FOR_REVIEW }
 
-      id = issue['number']
-
       add_label_to_an_issue(
-        id,
+        issue['number'],
         Constants::IN_PROGRESS
       )
     end

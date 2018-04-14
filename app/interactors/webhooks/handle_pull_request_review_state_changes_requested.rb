@@ -6,9 +6,9 @@ module Webhooks
     def_delegators :context, :payload
 
     def call
-      each_fixable_issue(payload['pull_request']['body']) do |id|
+      each_fixable_issue(payload['pull_request']['body']) do |number|
         add_label_to_an_issue(
-          id,
+          number,
           Constants::REJECTED
         )
       end

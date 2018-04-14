@@ -11,7 +11,7 @@ module Webhooks
     describe '#call' do
       specify do
         expect(RemoveLabel).to receive(:call!).with(
-          id: id,
+          number: id,
           label: [Constants::IN_PROGRESS, Constants::READY_FOR_REVIEW, Constants::REVIEW_REQUESTED],
           repo_full_name: repo_full_name,
           access_token: access_token

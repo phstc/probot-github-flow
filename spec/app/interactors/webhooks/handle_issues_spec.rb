@@ -3,7 +3,7 @@ require 'spec_helper'
 module Webhooks
   RSpec.describe HandleIssues do
     let(:issue) { File.read('./spec/fixtures/github/issue.json') }
-    let(:id) { issue['number'] }
+    let(:number) { issue['number'] }
     let(:repo_full_name) { 'octocat/Hello-World' }
     let(:payload) { { 'issue' => issue, 'action' => action } }
     let(:access_token) { 'token' }

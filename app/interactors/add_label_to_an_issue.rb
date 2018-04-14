@@ -2,7 +2,9 @@ class AddLabelToAnIssue
   include Interactor
   include InteractorHelpers
 
+  def_delegators :context, :repo_full_name, :number, :label
+
   def call
-    client.add_labels_to_an_issue(context.repo_full_name, context.id, [context.label])
+    client.add_labels_to_an_issue(repo_full_name, number, Array(label))
   end
 end
