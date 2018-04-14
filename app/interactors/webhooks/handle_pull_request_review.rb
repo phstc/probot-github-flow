@@ -8,7 +8,7 @@ module Webhooks
     def call
       case payload['review']['state']
       when 'changes_requested'
-        HandlePullRequestReviewStateChangeRequested.call!(payload: payload, repo_full_name: repo_full_name)
+        HandlePullRequestReviewStateChangesRequested.call!(payload: payload, repo_full_name: repo_full_name)
       when 'approved'
         HandlePullRequestReviewStateApproved.call!(payload: payload, repo_full_name: repo_full_name)
       end
