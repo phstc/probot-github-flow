@@ -1,5 +1,7 @@
 module InteractorHelpers
-  extend Forwardable
+  def self.included(base)
+    base.extend Forwardable
+  end
 
   private
 

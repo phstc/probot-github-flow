@@ -10,7 +10,11 @@ module Webhooks
 
       case payload.dig('label', 'name')
       when Constants::READY_FOR_REVIEW
-        RemoveLabel.call!(repo_full_name: repo_full_name, id: id, label: Constants::IN_PROGRESS)
+        RemoveLabel.call!(
+          repo_full_name: repo_full_name,
+          id: id,
+          label: Constants::IN_PROGRESS
+        )
       when Constants::REJECTED
         RemoveLabel.call!(
           repo_full_name: repo_full_name,
