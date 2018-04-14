@@ -3,6 +3,8 @@ module Webhooks
     include Interactor
     include InteractorHelpers
 
+    def_delegators :context, :payload
+
     def call
       case payload['action']
       when 'labeled'
