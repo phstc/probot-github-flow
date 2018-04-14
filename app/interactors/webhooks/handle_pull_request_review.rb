@@ -1,5 +1,5 @@
 module Webhooks
-  class HandleReviewRequested
+  class HandlePullRequestReview
     include Interactor
     include InteractorHelpers
 
@@ -12,21 +12,21 @@ module Webhooks
       when 'changes_requested'
         reject_issue(id)
       when 'approved'
-        remove_review_requested_issue(id)
+        remove_review_requested
       end
     end
 
     private
 
-    def reject_issue(_id)
+    def reject_issue
       Webhooks::FindFixableIssues.call!(payload['pull_request']['body']).each do |id|
-        AddLabelToAnIssue.call!(repo_full_name: repo_full_name, id: id, label: REJECTED)
+        AddLabelToAnIssue.call!(repo_full_name: repo_full_name, id: id, label: Constants::REJECTED)
       end
     end
 
-    def remove_review_requested_issue(_id)
+    def remove_review_requested
       Webhooks::FindFixableIssues.call!(payload['pull_request']['body']).each do |id|
-        RemoveLabel.call!(repo_full_name: repo_full_name, id: id, label: REVIEW_REQUESTED)
+        RemoveLabel.call!(repo_full_name: repo_full_name, id: id, label: Constants::REVIEW_REQUESTED)
       end
     end
   end
