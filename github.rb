@@ -21,30 +21,7 @@ class GitHub
     when 'pull_request'
       handle_github_pull_request(payload)
     when 'issues'
-      handle_github_issues(payload)
-    end
-  end
-
-  def handle_github_issues(payload)
-    id = payload['issue']['number']
-
-    if payload['action'] == 'labeled'
-      if payload.dig('label', 'name') == READY_FOR_REVIEW
-        RemoveLabel.call!(repo_full_name: repo_full_name, id: id, label: IN_PROGRESS)
-      end
-
-      if payload.dig('label', 'name') == REJECTED
-        RemoveLabel.call!(repo_full_name: repo_full_name, id: id, label: [IN_PROGRESS, READY_FOR_REVIEW])
-      end
-
-      if payload.dig('label', 'name') == REVIEW_REQUESTED
-        RemoveLabel.call!(repo_full_name: repo_full_name, id: id, label: IN_PROGRESS)
-        AddLabelToAnIssue.call!(repo_full_name: repo_full_name, id: id, label: READY_FOR_REVIEW)
-      end
-    end
-
-    if payload['action'] == 'closed'
-      RemoveLabel.call!(repo_full_name: repo_full_name, id: id, label: [IN_PROGRESS, READY_FOR_REVIEW, REVIEW_REQUESTED])
+      Webhooks::HandleIssues.call!(payload)
     end
   end
 

@@ -1,4 +1,6 @@
 module InteractorHelpers
+  extend Forwardable
+
   private
 
   def client
