@@ -17,11 +17,11 @@ class GitHub
 
     case type
     when 'pull_request_review'
-      handle_github_pull_request_review(payload)
+      HandleReviewRequested.call!(payload: payload, repo_full_name: repo_full_name)
     when 'pull_request'
       handle_github_pull_request(payload)
     when 'issues'
-      Webhooks::HandleIssues.call!(payload)
+      Webhooks::HandleIssues.call!(payload: payload)
     end
   end
 
@@ -35,20 +35,12 @@ class GitHub
     end
   end
 
-  def handle_github_pull_request_review(payload)
-    if payload['review']['state'] == 'changes_requested'
-      reject_issue(payload)
-    elsif payload['review']['state'] == 'approved'
-      remove_review_requested_issue(payload)
-    end
-  end
-
   private
 
   def update_referenced_issues_desc(payload)
     number = payload['pull_request']['number']
 
-    find_fixable_issue_ids(payload['pull_request']['body']).each do |id|
+    Webhooks::FindFixableIssues.call!(payload['pull_request']['body']).ids.each do |id|
       issue = client.issue(repo_full_name, id)
 
       action = payload['action']
@@ -76,7 +68,7 @@ class GitHub
   end
 
   def close_referenced_issues(payload)
-    find_fixable_issue_ids(payload['pull_request']['body']).each do |id|
+    Webhooks::FindFixableIssues.call!(payload['pull_request']['body']).ids.each do |id|
       client.close_issue(repo_full_name, id)
 
       RemoveLabel.call!(
@@ -104,33 +96,9 @@ class GitHub
     body + "\n**PR:** ##{number}"
   end
 
-  def reject_issue(payload)
-    find_fixable_issue_ids(payload['pull_request']['body']).each do |id|
-      AddLabelToAnIssue.call!(repo_full_name: repo_full_name, id: id, label: REJECTED)
-    end
-  end
-
   def review_requested_issue(payload)
-    find_fixable_issue_ids(payload['pull_request']['body']).each do |id|
+    Webhooks::FindFixableIssues.call!(payload['pull_request']['body']).ids.each do |id|
       AddLabelToAnIssue.call!(repo_full_name: repo_full_name, id: id, label: REVIEW_REQUESTED)
     end
-  end
-
-  def remove_review_requested_issue(payload)
-    find_fixable_issue_ids(payload['pull_request']['body']).each do |id|
-      RemoveLabel.call!(repo_full_name: repo_full_name, id: id, label: REVIEW_REQUESTED)
-    end
-  end
-
-  def find_fixable_issue_ids(body)
-    fixes = body.scan(/(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved)\s*(\#\d+|http.*\/\d+)/i)
-
-    fixes.map!(&:last).map! do |issue|
-      if issue.start_with?('#') # #7631"
-        issue.sub('#', '')
-      else
-        issue.split('/').last # https://github.com/woodmont/spreeworks/issues/7631
-      end
-    end.uniq
   end
 end
