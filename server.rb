@@ -3,6 +3,7 @@ require 'sinatra'
 require 'rest_client'
 require 'json'
 require 'octokit'
+require 'interactor'
 require './github'
 require './app/interactors/interactor_helpers'
 require './app/interactors/create_hooks'
@@ -38,7 +39,6 @@ get '/' do
   CreateHooks.call!(access_token: access_token)
 
   client = Octokit::Client.new(access_token: access_token)
-
 
   erb :index, locals: { user: client.user.to_h, access_token: access_token }
 end

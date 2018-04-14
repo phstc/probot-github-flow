@@ -1,20 +1,9 @@
 class CreateHooks
+  include Interactor
   include InteractorHelpers
-
-  attr_reader :context
 
   REPOS = ['woodmont/capital', 'woodmont/listings', 'phstc/putslabel', 'phstc/crosshero'].freeze
   WEBHOOK_URL = 'https://putslabel.herokuapp.com/webhook'.freeze
-
-  class << self
-    def call!(context = {})
-      new(context).call
-    end
-  end
-
-  def initialize(context)
-    @context = OpenStruct.new(context)
-  end
 
   def call
     REPOS.each do |repo|
@@ -32,7 +21,5 @@ class CreateHooks
       # TODO ignore if hook is already in place
       # otherwise log it in an error tracker
     end
-
-    context
   end
 end
