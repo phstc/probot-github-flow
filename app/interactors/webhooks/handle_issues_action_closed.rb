@@ -3,7 +3,7 @@ module Webhooks
     include Interactor
     include InteractorHelpers
 
-    def_delegators :context, :payload, :repo_full_name
+    def_delegators :context, :payload, :repo_full_name, :access_token
 
     def call
       id = payload['issue']['number']
@@ -11,7 +11,8 @@ module Webhooks
       RemoveLabel.call!(
         repo_full_name: repo_full_name,
         id: id,
-        label: [Constants::IN_PROGRESS, Constants::READY_FOR_REVIEW, Constants::REVIEW_REQUESTED]
+        label: [Constants::IN_PROGRESS, Constants::READY_FOR_REVIEW, Constants::REVIEW_REQUESTED],
+        access_token: access_token
       )
     end
   end

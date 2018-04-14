@@ -6,6 +6,7 @@ module Webhooks
     let(:id) { issue['number'] }
     let(:repo_full_name) { 'octocat/Hello-World' }
     let(:payload) { { 'issue' => issue, 'label' => { 'name' => label } } }
+    let(:access_token) { 'token' }
 
     describe '#call' do
       context 'when ready for review' do
@@ -15,10 +16,11 @@ module Webhooks
           expect(RemoveLabel).to receive(:call!).with(
             id: id,
             label: Constants::IN_PROGRESS,
-            repo_full_name: repo_full_name
+            repo_full_name: repo_full_name,
+            access_token: access_token
           )
 
-          described_class.call!(payload: payload, repo_full_name: repo_full_name)
+          described_class.call!(payload: payload, repo_full_name: repo_full_name, access_token: access_token)
         end
       end
 
@@ -29,16 +31,18 @@ module Webhooks
           expect(RemoveLabel).to receive(:call!).with(
             id: id,
             label: Constants::IN_PROGRESS,
-            repo_full_name: repo_full_name
+            repo_full_name: repo_full_name,
+            access_token: access_token
           )
 
           expect(AddLabelToAnIssue).to receive(:call!).with(
             id: id,
             label: Constants::READY_FOR_REVIEW,
-            repo_full_name: repo_full_name
+            repo_full_name: repo_full_name,
+            access_token: access_token
           )
 
-          described_class.call!(payload: payload, repo_full_name: repo_full_name)
+          described_class.call!(payload: payload, repo_full_name: repo_full_name, access_token: access_token)
         end
       end
 
@@ -49,10 +53,11 @@ module Webhooks
           expect(RemoveLabel).to receive(:call!).with(
             id: id,
             label: [Constants::IN_PROGRESS, Constants::READY_FOR_REVIEW],
-            repo_full_name: repo_full_name
+            repo_full_name: repo_full_name,
+            access_token: access_token
           )
 
-          described_class.call!(payload: payload, repo_full_name: repo_full_name)
+          described_class.call!(payload: payload, repo_full_name: repo_full_name, access_token: access_token)
         end
       end
     end
