@@ -24,7 +24,7 @@ module Webhooks
     def update_referenced_issues_desc(payload)
       number = payload['pull_request']['number']
 
-      Webhooks::FindFixableIssues.call!(body: payload['pull_request']['body']).ids.each do |id|
+      each_fixable_issue(payload['pull_request']['body']) do |id|
         issue = client.issue(repo_full_name, id)
 
         action = payload['action']

@@ -6,7 +6,7 @@ module Webhooks
     def_delegators :context, :payload, :repo_full_name, :access_token
 
     def call
-      Webhooks::FindFixableIssues.call!(body: payload['pull_request']['body']).ids.each do |id|
+      each_fixable_issue(payload['pull_request']['body']) do |id|
         RemoveLabel.call!(
           repo_full_name: repo_full_name,
           id: id,

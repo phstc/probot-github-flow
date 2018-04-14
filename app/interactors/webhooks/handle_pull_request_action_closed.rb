@@ -8,7 +8,7 @@ module Webhooks
     def call
       number = payload['pull_request']['number']
 
-      Webhooks::FindFixableIssues.call!(payload['pull_request']['body']).ids.each do |id|
+      each_fixable_issue(payload['pull_request']['body']) do |id|
         issue = client.issue(repo_full_name, id)
 
         body = remove_pr_reference(number, issue)
