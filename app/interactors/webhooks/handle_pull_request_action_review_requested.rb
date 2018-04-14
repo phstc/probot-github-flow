@@ -1,5 +1,5 @@
 module Webhooks
-  class HandlePullRequestActionReviewRequested
+  class HandlePullRequestReviewStateChangeRequested
     include Interactor
     include InteractorHelpers
 

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Webhooks
-  RSpec.describe HandlePullRequestReviewStateChangeRequested do
+  RSpec.describe HandlePullRequestReviewStateApproved do
     let(:payload) { { 'pull_request' => { 'body' => body } } }
     let(:body) { 'Closes #123' }
     let(:id) { 'number' }
@@ -12,10 +12,10 @@ module Webhooks
       specify do
         allow(Webhooks::FindFixableIssues).to receive(:call!).with(body: body).and_return(double(ids: [id]))
 
-        expect(AddLabelToAnIssue).to receive(:call!).with(
+        expect(RemoveLabel).to receive(:call!).with(
           repo_full_name: repo_full_name,
           id: id,
-          label: Constants::REVIEW_REQUESTED,
+          label: [Constants::REVIEW_REQUESTED, Constants::REJECTED],
           access_token: access_token
         )
 
