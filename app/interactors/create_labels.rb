@@ -1,6 +1,8 @@
-class SetupLabels
+class CreateLabels
   include Interactor
   include InteractorHelpers
+
+  def_delegators :context, :repo_full_name
 
   def call
     [[Constants::READY_FOR_REVIEW, 'fef2c0'],
