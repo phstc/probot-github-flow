@@ -2,11 +2,14 @@ class CreateHooks
   include Interactor
   include InteractorHelpers
 
-  REPOS = ['woodmont/capital', 'woodmont/listings', 'phstc/putslabel', 'phstc/crosshero'].freeze
+  REPOS_PROD = ['woodmont/capital', 'woodmont/listings', 'phstc/putslabel', 'phstc/crosshero'].freeze
+  REPOS_STG = ['phstc/putslabel'].freeze
   WEBHOOK_URL = 'https://putslabel.herokuapp.com/webhook'.freeze
 
   def call
-    REPOS.each do |repo|
+    repos = ENV['PRODUCTION'] == 'true' ? REPOS_PROD : REPOS_STG
+
+    repos.each do |repo|
       client.create_hook(
         repo,
         'web',
