@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Webhooks
-  RSpec.describe HandlePullRequestReviewStateChangeRequested do
+  RSpec.describe HandlePullRequestActionReviewRequested do
     let(:payload) { { 'pull_request' => { 'body' => body } } }
     let(:body) { 'Closes #123' }
     let(:number) { 'number' }

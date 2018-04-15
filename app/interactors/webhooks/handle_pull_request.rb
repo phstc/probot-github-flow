@@ -3,7 +3,7 @@ module Webhooks
     include Interactor
     include InteractorHelpers
 
-    def_delegators :context, :payload, :access_token
+    def_delegators :context, :payload, :access_token, :repo_full_name
 
     def call
       executor = case payload['action']
