@@ -1,43 +1,42 @@
-* auto add webhook
-* auto add labels in progress, ready for review, Constants::REJECTED, review requested
-* auto remove in progress when ready for review or Constants::REJECTED
-* auto remove in progress and add ready for review when review requested
-* auto remove in progress, ready for review, review requested when closed
-* auto assign when fixes in a PR
+### Usage
+
+1.  Create an issue
+2.  Create a PR with `Fixes #number`
+3.  PutsLabel will label the issue with `in progress`, add you (PR author) as an assignee and append the PR link in the issue description
+4.  Ask someone to review your PR
+5.  PutsLabel will label the issue with `review requested` and `ready for review`, and remove `in progress`
+6.  If the reviewer requests changes, PutsLabel will remove `ready for review` and label the issue with `rejected`
+7.  If the reviewer approves the PR, PutsLabel will remove `rejected` (in case it was previously rejected) and `review requested`
+8.  Once the PR is merged, PutsLabel will clean up the issue removing all labels it has added
+
+### Getting Started
+
+First
 
 ```shell
 bundle install
+```
+
+Then
+
+```shell
 bundle exec dotenv shotgun -p 4567
 ```
 
-```
-# production deploy
+### Deploy
+
+Production URL: https://putslabel.herokuapp.com/
+
+#### Production
+
+```shell
 git push prd master
-# https://putslabel.herokuapp.com/
-
-
-# staging deploy
-git push stg master
-# https://putslabel-stg.herokuapp.com/
 ```
 
-# basics-of-authentication
+#### Staging
 
-This is the sample project built by following the "[Basics of Authentication][basics of auth]"
-guide on developer.github.com.
+Staging URL: https://putslabel-stg.herokuapp.com/
 
-It consists of two different servers: one built correctly, and one built less optimally.
-
-## Install and Run project
-
-To run these projects, make sure you have [Bundler][bundler] installed; then type
-`bundle install` on the command line.
-
-For the "less optimal" server, type `ruby server.rb` on the command line.
-
-For the correct server, enter `ruby advanced_server.rb` on the command line.
-
-Both commands will run the server at `localhost:4567`.
-
-[basics of auth]: http://developer.github.com/guides/basics-of-authentication/
-[bundler]: http://gembundler.com/
+```shell
+git push stg master
+```
