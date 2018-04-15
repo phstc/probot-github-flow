@@ -7,6 +7,8 @@ require 'interactor'
 require 'mongoid'
 require './constants'
 require './app/interactors/interactor_helper'
+
+Dir['./app/models/**/*.rb'].each(&method(:require))
 Dir['./app/interactors/**/*.rb'].each(&method(:require))
 
 Bundler.require(:default, ENV['RACK_ENV'] || 'development')
