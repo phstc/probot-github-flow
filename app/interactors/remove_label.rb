@@ -6,5 +6,7 @@ class RemoveLabel
 
   def call
     client.remove_label(repo_full_name, number, label)
+  rescue Octokit::NotFound
+    # ignore if label not found
   end
 end
