@@ -6,12 +6,12 @@ module Webhooks
     def_delegators :context, :payload, :repo_full_name, :access_token
 
     def call
-      case payload['review']['state']
-      when 'changes_requested'
-        HandlePullRequestReviewStateChangesRequested
-      when 'approved'
-        HandlePullRequestReviewStateApproved
-      end
+      executor = case payload['review']['state']
+                 when 'changes_requested'
+                   HandlePullRequestReviewStateChangesRequested
+                 when 'approved'
+                   HandlePullRequestReviewStateApproved
+                 end
 
       executor&.call!(
         payload: payload,
