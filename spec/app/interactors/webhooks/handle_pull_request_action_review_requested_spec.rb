@@ -12,7 +12,7 @@ module Webhooks
       specify do
         allow(Webhooks::FindFixableIssues).to receive(:call!).with(body: body).and_return(double(numbers: [number]))
 
-        expect(AddLabelToAnIssue).to receive(:call!).with(
+        expect(AddLabelsToAnIssue).to receive(:call!).with(
           repo_full_name: repo_full_name,
           number: number,
           label: Constants::REVIEW_REQUESTED,

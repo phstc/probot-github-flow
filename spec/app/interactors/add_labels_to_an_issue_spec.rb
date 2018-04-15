@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe AddLabelToAnIssue do
+RSpec.describe AddLabelsToAnIssue do
   let(:number) { 'number' }
   let(:repo_full_name) { 'octocat/Hello-World' }
   let(:access_token) { 'token' }

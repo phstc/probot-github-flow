@@ -27,7 +27,7 @@ module Webhooks
     def add_in_progress_label(issue)
       return if issue['labels'].any? { |label| label['name'] == Constants::READY_FOR_REVIEW }
 
-      add_label_to_an_issue(
+      add_labels_to_an_issue(
         issue['number'],
         Constants::IN_PROGRESS
       )

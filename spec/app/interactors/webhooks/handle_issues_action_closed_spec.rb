@@ -12,7 +12,21 @@ module Webhooks
       specify do
         expect(RemoveLabel).to receive(:call!).with(
           number: number,
-          label: [Constants::IN_PROGRESS, Constants::READY_FOR_REVIEW, Constants::REVIEW_REQUESTED],
+          label: Constants::IN_PROGRESS,
+          repo_full_name: repo_full_name,
+          access_token: access_token
+        )
+
+        expect(RemoveLabel).to receive(:call!).with(
+          number: number,
+          label: Constants::READY_FOR_REVIEW,
+          repo_full_name: repo_full_name,
+          access_token: access_token
+        )
+
+        expect(RemoveLabel).to receive(:call!).with(
+          number: number,
+          label: Constants::REVIEW_REQUESTED,
           repo_full_name: repo_full_name,
           access_token: access_token
         )

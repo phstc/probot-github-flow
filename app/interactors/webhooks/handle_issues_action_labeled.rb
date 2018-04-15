@@ -15,7 +15,7 @@ module Webhooks
         remove_label(number, [Constants::IN_PROGRESS, Constants::READY_FOR_REVIEW])
       when Constants::REVIEW_REQUESTED
         remove_label(number, Constants::IN_PROGRESS)
-        add_label_to_an_issue(number, Constants::READY_FOR_REVIEW)
+        add_labels_to_an_issue(number, Constants::READY_FOR_REVIEW)
       end
     end
   end

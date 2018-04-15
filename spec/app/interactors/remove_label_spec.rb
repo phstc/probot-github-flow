@@ -13,7 +13,7 @@ RSpec.describe RemoveLabel do
 
   describe '#call' do
     specify do
-      expect(client).to receive(:remove_label).with(repo_full_name, number, [label])
+      expect(client).to receive(:remove_label).with(repo_full_name, number, label)
 
       described_class.call!(
         number: number,

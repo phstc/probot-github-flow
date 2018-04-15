@@ -15,7 +15,14 @@ module Webhooks
         expect(RemoveLabel).to receive(:call!).with(
           repo_full_name: repo_full_name,
           number: number,
-          label: [Constants::REVIEW_REQUESTED, Constants::REJECTED],
+          label: Constants::REVIEW_REQUESTED,
+          access_token: access_token
+        )
+
+        expect(RemoveLabel).to receive(:call!).with(
+          repo_full_name: repo_full_name,
+          number: number,
+          label: Constants::REJECTED,
           access_token: access_token
         )
 

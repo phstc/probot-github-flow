@@ -9,17 +9,19 @@ module InteractorHelper
     Webhooks::FindFixableIssues.call!(body: body).numbers.each(&block)
   end
 
-  def remove_label(number, label)
-    RemoveLabel.call!(
-      repo_full_name: context.repo_full_name,
-      number: number,
-      label: label,
-      access_token: context.access_token
-    )
+  def remove_label(number, labels)
+    Array(labels).each do |label|
+      RemoveLabel.call!(
+        repo_full_name: context.repo_full_name,
+        number: number,
+        label: label,
+        access_token: context.access_token
+      )
+    end
   end
 
-  def add_label_to_an_issue(number, label)
-    AddLabelToAnIssue.call!(
+  def add_labels_to_an_issue(number, label)
+    AddLabelsToAnIssue.call!(
       repo_full_name: context.repo_full_name,
       number: number,
       label: label,

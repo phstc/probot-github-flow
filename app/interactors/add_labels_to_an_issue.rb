@@ -1,4 +1,4 @@
-class AddLabelToAnIssue
+class AddLabelsToAnIssue
   include Interactor
   include InteractorHelper
 
