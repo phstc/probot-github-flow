@@ -1,7 +1,7 @@
 module Webhooks
   class FindFixableIssues
     include Interactor
-    include InteractorHelpers
+    include InteractorHelper
 
     def_delegators :context, :body
 

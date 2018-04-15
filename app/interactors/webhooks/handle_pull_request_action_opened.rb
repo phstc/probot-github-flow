@@ -2,7 +2,7 @@
 module Webhooks
   class HandlePullRequestActionOpened
     include Interactor
-    include InteractorHelpers
+    include InteractorHelper
 
     def_delegators :context, :payload, :access_token
 

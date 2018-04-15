@@ -1,7 +1,7 @@
 module Webhooks
   class HandleIssuesActionLabeled
     include Interactor
-    include InteractorHelpers
+    include InteractorHelper
 
     def_delegators :context, :payload
 

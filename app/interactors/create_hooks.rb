@@ -1,6 +1,6 @@
 class CreateHooks
   include Interactor
-  include InteractorHelpers
+  include InteractorHelper
 
   REPOS_PROD = ['woodmont/capital', 'woodmont/listings', 'phstc/putslabel', 'phstc/crosshero'].freeze
   REPOS_STG = ['phstc/putslabel'].freeze

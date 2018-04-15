@@ -1,7 +1,7 @@
 module Webhooks
   class HandleWebhook
     include Interactor
-    include InteractorHelpers
+    include InteractorHelper
 
     def_delegators :context, :access_token, :type, :payload
 

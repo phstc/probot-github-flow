@@ -1,6 +1,6 @@
 class RemoveLabel
   include Interactor
-  include InteractorHelpers
+  include InteractorHelper
 
   def_delegators :context, :repo_full_name, :number, :label
 

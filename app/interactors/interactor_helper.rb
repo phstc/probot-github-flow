@@ -1,4 +1,4 @@
-module InteractorHelpers
+module InteractorHelper
   def self.included(base)
     base.extend Forwardable
   end

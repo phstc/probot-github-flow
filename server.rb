@@ -5,6 +5,7 @@ require 'json'
 require 'octokit'
 require 'interactor'
 require './constants'
+require './app/interactors/interactor_helper'
 Dir['./app/interactors/**/*.rb'].each(&method(:require))
 
 Bundler.require(:default, ENV['RACK_ENV'] || 'development')

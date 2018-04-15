@@ -1,6 +1,6 @@
 class CreateUser
   include Interactor
-  include InteractorHelpers
+  include InteractorHelper
 
   def call
     result = RestClient.post(
