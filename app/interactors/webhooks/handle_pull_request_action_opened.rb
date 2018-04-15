@@ -4,7 +4,7 @@ module Webhooks
     include Interactor
     include InteractorHelper
 
-    def_delegators :context, :payload, :access_token
+    def_delegators :context, :payload, :access_token, :repo_full_name
 
     def call
       each_fixable_issue(payload['pull_request']['body']) do |number|
