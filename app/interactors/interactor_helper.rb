@@ -20,11 +20,11 @@ module InteractorHelper
     end
   end
 
-  def add_labels_to_an_issue(number, label)
+  def add_labels_to_an_issue(number, *labels)
     AddLabelsToAnIssue.call!(
       repo_full_name: context.repo_full_name,
       number: number,
-      label: label,
+      labels: labels,
       access_token: context.access_token
     )
   end

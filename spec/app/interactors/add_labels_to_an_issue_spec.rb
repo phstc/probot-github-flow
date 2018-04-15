@@ -19,7 +19,7 @@ RSpec.describe AddLabelsToAnIssue do
         number: number,
         repo_full_name: repo_full_name,
         access_token: access_token,
-        label: label
+        labels: [label]
       )
     end
   end

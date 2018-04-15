@@ -37,7 +37,7 @@ module Webhooks
 
           expect(AddLabelsToAnIssue).to receive(:call!).with(
             number: number,
-            label: Constants::READY_FOR_REVIEW,
+            labels: [Constants::READY_FOR_REVIEW],
             repo_full_name: repo_full_name,
             access_token: access_token
           )
