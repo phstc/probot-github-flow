@@ -8,5 +8,5 @@ class User
   field :name, type: String
   field :access_token, type: String
 
-  has_many :repositories
+  has_and_belongs_to_many :repositories
 end

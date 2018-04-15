@@ -7,5 +7,23 @@
   <p>
     Hello <%= user.name %>
   </p>
+  <h3>Add a new repository</h3>
+  <form action="/repositories" method="post">
+    <label for="repository">Name</label>
+    <input type="text" name="full_name" required="true">
+    <button type="submit">Add</button>
+  </form>
+
+  <h3>List of enabled repositories</h3>
+  <table>
+    <tr>
+      <td>Name</td>
+    </tr>
+    <% user.repositories.each do |repo| %>
+    <tr>
+      <td><%= repo.full_name %></td>
+    </tr>
+    <% end %>
+  </table>
 </body>
 </html>

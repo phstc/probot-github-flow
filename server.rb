@@ -55,6 +55,14 @@ post '/webhook' do
   status 200
 end
 
+post '/repositories' do
+  user = User.where(login: session[:login]).first
+
+  CreateRepository.call!(user: user, full_name: params['full_name'])
+
+  redirect '/'
+end
+
 get '/callback' do
   session_code = request.env['rack.request.query_hash']['code']
 
