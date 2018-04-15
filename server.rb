@@ -25,7 +25,7 @@ use Rack::Session::Cookie, key: 'PutsLabel',
 Mongoid.load!('./config/mongoid.yml', ENV['RACK_ENV'] || 'development')
 
 def authenticated?
-  session[:access_token]
+  session[:login]
 end
 
 def authenticate!
@@ -41,9 +41,9 @@ get '/' do
 
   CreateHooks.call!(access_token: access_token)
 
-  client = Octokit::Client.new(access_token: access_token)
+  user = User.where(login: session[:login]).first
 
-  erb :index, locals: { user: client.user.to_h, access_token: access_token }
+  erb :index, locals: { user: user }
 end
 
 post '/webhook' do
@@ -58,11 +58,13 @@ end
 get '/callback' do
   session_code = request.env['rack.request.query_hash']['code']
 
-  session[:access_token] = CreateUser.call!(
+  user = CreateUser.call!(
     session_code: session_code,
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET
-  ).access_token
+  ).user
+
+  session[:login] = user.login
 
   redirect '/'
 end
