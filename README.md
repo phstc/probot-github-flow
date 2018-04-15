@@ -1,14 +1,24 @@
-
-- auto add webhook
-- auto add labels in progress, ready for review, Constants::REJECTED, review requested
-- auto remove in progress when ready for review or Constants::REJECTED
-- auto remove in progress and add ready for review when review requested
-- auto remove in progress, ready for review, review requested when closed
-- auto assign when fixes in a PR
+* auto add webhook
+* auto add labels in progress, ready for review, Constants::REJECTED, review requested
+* auto remove in progress when ready for review or Constants::REJECTED
+* auto remove in progress and add ready for review when review requested
+* auto remove in progress, ready for review, review requested when closed
+* auto assign when fixes in a PR
 
 ```shell
 bundle install
 bundle exec dotenv shotgun -p 4567
+```
+
+```
+# production deploy
+git push prd master
+# https://putslabel.herokuapp.com/
+
+
+# staging deploy
+git push stg master
+# https://putslabel-stg.herokuapp.com/
 ```
 
 # basics-of-authentication
