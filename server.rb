@@ -4,6 +4,7 @@ require 'rest_client'
 require 'json'
 require 'octokit'
 require 'interactor'
+require 'mongoid'
 require './constants'
 require './app/interactors/interactor_helper'
 Dir['./app/interactors/**/*.rb'].each(&method(:require))
@@ -18,6 +19,8 @@ use Rack::Session::Cookie, key: 'PutsLabel',
                            path: '/',
                            expire_after: 14_400,
                            secret: ENV['COOKIE_SECRET']
+
+Mongoid.load!('./config/mongoid.yml', ENV['RACK_ENV'] || 'development')
 
 def authenticated?
   session[:access_token]

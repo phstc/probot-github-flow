@@ -1,0 +1,22 @@
+production:
+  clients:
+    default:
+     uri: <%= ENV['MONGOHQ_URL'] %>
+     options:
+       connect_timeout: 15
+       skip_version_check: true
+       safe: true
+       max_pool_size: 25
+development:
+  clients:
+    default:
+      database: putslabel_development
+      hosts:
+        - localhost:27017
+      options:
+test:
+  clients:
+    default:
+      database: putslabel_test
+      hosts:
+        - localhost:27017
