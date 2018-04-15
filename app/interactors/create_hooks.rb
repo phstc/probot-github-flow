@@ -2,19 +2,30 @@ class CreateHooks
   include Interactor
   include InteractorHelper
 
-  REPOS_PROD = ['woodmont/capital', 'woodmont/listings', 'phstc/putslabel', 'phstc/crosshero'].freeze
+  REPOS_PRD = ['woodmont/capital', 'woodmont/listings', 'phstc/putslabel', 'phstc/crosshero'].freeze
   REPOS_STG = ['phstc/putslabel'].freeze
-  WEBHOOK_URL = 'https://putslabel.herokuapp.com/webhook'.freeze
+  WEBHOOK_URL_PRD = 'https://putslabel.herokuapp.com/webhook'.freeze
+  WEBHOOK_URL_STG = 'https://putslabel-stg.herokuapp.com/webhook'.freeze
 
   def call
-    repos = ENV['PRODUCTION'] == 'true' ? REPOS_PROD : REPOS_STG
+    # TODO Make this configuration based on ENV, not on ifs
+    if ENV['PRODUCTION'] == 'true'
+      repos = REPOS_PRD
+      url = WEBHOOK_URL_PRD
+    elsif ENV['STAGING'] == 'true'
+      repos = REPOS_STG
+      url = WEBHOOK_URL_STG
+    else
+      # NOOP webhooks don't work against localhost
+      return
+    end
 
     repos.each do |repo|
       client.create_hook(
         repo,
         'web',
         {
-          url: WEBHOOK_URL,
+          url: url,
           content_type: 'json'
         },
         events: %w[issues status pull_request_review push pull_request],
