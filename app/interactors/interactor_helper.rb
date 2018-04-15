@@ -9,8 +9,8 @@ module InteractorHelper
     Webhooks::FindFixableIssues.call!(body: body).numbers.each(&block)
   end
 
-  def remove_label(number, labels)
-    Array(labels).each do |label|
+  def remove_labels(number, *labels)
+    labels.each do |label|
       RemoveLabel.call!(
         repo_full_name: context.repo_full_name,
         number: number,

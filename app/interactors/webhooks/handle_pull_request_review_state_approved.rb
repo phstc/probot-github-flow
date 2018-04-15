@@ -7,9 +7,9 @@ module Webhooks
 
     def call
       each_fixable_issue(payload['pull_request']['body']) do |number|
-        remove_label(
+        remove_labels(
           number,
-          [Constants::REVIEW_REQUESTED, Constants::REJECTED]
+          Constants::REVIEW_REQUESTED, Constants::REJECTED
         )
       end
     end

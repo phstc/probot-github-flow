@@ -6,9 +6,9 @@ module Webhooks
     def_delegators :context, :payload
 
     def call
-      remove_label(
+      remove_labels(
         payload['issue']['number'],
-        [Constants::IN_PROGRESS, Constants::READY_FOR_REVIEW, Constants::REVIEW_REQUESTED]
+        Constants::IN_PROGRESS, Constants::READY_FOR_REVIEW, Constants::REVIEW_REQUESTED
       )
     end
   end
