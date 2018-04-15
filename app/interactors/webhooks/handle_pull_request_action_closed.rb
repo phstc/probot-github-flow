@@ -3,7 +3,7 @@ module Webhooks
     include Interactor
     include InteractorHelper
 
-    def_delegators :context, :payload
+    def_delegators :context, :payload, :repo_full_name
 
     def call
       each_fixable_issue(payload['pull_request']['body']) do |number|
