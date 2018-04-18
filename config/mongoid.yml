@@ -1,7 +1,7 @@
 production:
   clients:
     default:
-     uri: <%= ENV['MONGOHQ_URL'] %>
+     uri: <%= ENV['MONGODB_URI'] %>
      options:
        connect_timeout: 15
        skip_version_check: true
