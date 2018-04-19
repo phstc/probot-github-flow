@@ -6,6 +6,10 @@ module Webhooks
     def_delegators :context, :access_token, :type, :payload
 
     def call
+      repo = Repository.where(full_name: repo_full_name)
+
+      context.access_token = repo.owner.access_token
+
       CreateLabels.call!(repo_full_name: repo_full_name, access_token: access_token)
 
       executor = case type
