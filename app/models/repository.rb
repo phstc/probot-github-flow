@@ -7,5 +7,7 @@ class Repository
   field :private_repo, type: Boolean
   field :enabled, type: Boolean
 
+  belongs_to :owner, class_name: 'User'
+
   has_and_belongs_to_many :users
 end

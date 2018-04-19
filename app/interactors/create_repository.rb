@@ -14,6 +14,7 @@ class CreateRepository
     repo.name = repo_hash['name']
     repo.private_repo = repo_hash['private']
     repo.enabled = true
+    repo.owner = user
 
     repo.save
 
