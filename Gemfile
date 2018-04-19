@@ -53,6 +53,8 @@ group :development do
 
   gem 'dotenv-rails'
   gem 'rubocop'
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 
