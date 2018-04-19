@@ -1,4 +1,6 @@
 class WebhooksController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: :create
+
   def create
     Webhooks::HandleWebhook.call!(
       access_token: ACCESS_TOKEN,
