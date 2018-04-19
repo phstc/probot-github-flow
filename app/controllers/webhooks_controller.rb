@@ -1,6 +1,8 @@
 class WebhooksController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :create
 
+  ACCESS_TOKEN = ENV['GH_ACCESS_TOKEN']
+
   def create
     # TODO validate secret from webhook call
     Webhooks::HandleWebhook.call!(
