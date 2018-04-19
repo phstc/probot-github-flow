@@ -1,12 +1,14 @@
 <p>
-  Hello <%= @user.name %>
+  Hello
+  <%= @user.name %>
 </p>
 <h3>Add a new repository</h3>
-<form action="/repositories" method="post">
-  <label for="repository">Name</label>
-  <input type="text" name="full_name" required="true">
-  <button type="submit">Add</button>
-</form>
+
+<%= form_for @repository do |f| %>
+<%= f.label :full_name %>
+<%= f.text_field :full_name %>
+<%= f.submit %>
+<% end %>
 
 <h3>List of enabled repositories</h3>
 <table>
