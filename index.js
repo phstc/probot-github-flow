@@ -4,17 +4,9 @@ module.exports = robot => {
   const REVIEW_REQUESTED = 'review requested'
   const IN_PROGRESS = 'in progress'
 
-  robot.log('Yay, the app was loaded!')
-
-  // For more information on building apps:
-  // https://probot.github.io/docs/
-
-  // To get your app running against GitHub, see:
-  // https://probot.github.io/docs/development/
-
-  robot.on('issues.labeled', async context => {
-    robot.log(context)
-  })
+  const addLabels = async (github, owner, repo, number, labels) => {
+    await github.issues.addLabels({ owner, repo, number, labels })
+  }
 
   const removeLabels = async (github, owner, repo, number, labels) => {
     labels.forEach(async name => {
@@ -27,8 +19,57 @@ module.exports = robot => {
     })
   }
 
+  robot.log('Yay, the app was loaded!')
+
+  // For more information on building apps:
+  // https://probot.github.io/docs/
+
+  // To get your app running against GitHub, see:
+  // https://probot.github.io/docs/development/
+
+  robot.on('issues.labeled', async context => {
+    robot.log(context)
+
+    switch (context.payload.label.name) {
+      case READY_FOR_REVIEW:
+        await removeLabels(
+          context.github,
+          context.payload.repository.owner.login,
+          context.payload.repository.name,
+          context.payload.issue.number,
+          [IN_PROGRESS]
+        )
+        break
+      case REJECT:
+        await removeLabels(
+          context.github,
+          context.payload.repository.owner.login,
+          context.payload.repository.name,
+          context.payload.issue.number,
+          [IN_PROGRESS, READY_FOR_REVIEW]
+        )
+        break
+      case REVIEW_REQUESTED:
+        await removeLabels(
+          context.github,
+          context.payload.repository.owner.login,
+          context.payload.repository.name,
+          context.payload.issue.number,
+          [IN_PROGRESS]
+        )
+        await addLabels(
+          context.github,
+          context.payload.repository.owner.login,
+          context.payload.repository.name,
+          context.payload.issue.number,
+          [READY_FOR_REVIEW]
+        )
+        break
+    }
+  })
+
   robot.on('issues.closed', async context => {
-    // robot.log(context)
+    robot.log(context)
 
     await removeLabels(
       context.github,
