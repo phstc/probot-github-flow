@@ -1,26 +1,26 @@
-module.exports = robot => {
-  const READY_FOR_REVIEW = 'ready for review'
-  const REJECTED = 'rejected'
-  const REVIEW_REQUESTED = 'review requested'
-  const IN_PROGRESS = 'in progress'
+const findFixableIssues = require('../lib/findFixableIssues')
 
-  const addLabels = async (github, owner, repo, number, labels) => {
-    await github.issues.addLabels({ owner, repo, number, labels })
-  }
+const READY_FOR_REVIEW = 'ready for review'
+const REJECTED = 'rejected'
+const REVIEW_REQUESTED = 'review requested'
+const IN_PROGRESS = 'in progress'
 
-  const removeLabels = async (github, owner, repo, number, labels) => {
-    labels.forEach(async name => {
-      await github.issues.removeLabel({
-        owner,
-        repo,
-        number,
-        name
-      })
+const addLabels = async (github, owner, repo, number, labels) => {
+  await github.issues.addLabels({ owner, repo, number, labels })
+}
+
+const removeLabels = async (github, owner, repo, number, labels) => {
+  labels.forEach(async name => {
+    await github.issues.removeLabel({
+      owner,
+      repo,
+      number,
+      name
     })
-  }
+  })
+}
 
-  robot.log('Yay, the app was loaded!')
-
+module.exports = robot => {
   // For more information on building apps:
   // https://probot.github.io/docs/
 
@@ -97,5 +97,34 @@ module.exports = robot => {
 
   robot.on('pull_request_review', async context => {
     robot.log(context)
+
+    switch (context.payload.review.state) {
+      case 'changes_requested':
+        findFixableIssues(context.payload.pull_request.body).forEach(
+          async number => {
+            await addLabels(
+              context.github,
+              context.payload.repository.owner.login,
+              context.payload.repository.name,
+              number,
+              [REJECTED]
+            )
+          }
+        )
+        break
+      case 'approved':
+        findFixableIssues(context.payload.pull_request.body).forEach(
+          async number => {
+            await removeLabels(
+              context.github,
+              context.payload.repository.owner.login,
+              context.payload.repository.name,
+              number,
+              [REVIEW_REQUESTED, REJECTED]
+            )
+          }
+        )
+        break
+    }
   })
 }
