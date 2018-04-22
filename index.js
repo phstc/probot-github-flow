@@ -93,6 +93,18 @@ module.exports = robot => {
 
   robot.on('pull_request.review_requested', async context => {
     robot.log(context)
+
+    findFixableIssues(context.payload.pull_request.body).forEach(
+      async number => {
+        await addLabels(
+          context.github,
+          context.payload.repository.owner.login,
+          context.payload.repository.name,
+          number,
+          [REVIEW_REQUESTED]
+        )
+      }
+    )
   })
 
   robot.on('pull_request_review', async context => {
