@@ -40,7 +40,7 @@ module.exports = robot => {
           [IN_PROGRESS]
         )
         break
-      case REJECT:
+      case REJECTED:
         await removeLabels(
           context.github,
           context.payload.repository.owner.login,
