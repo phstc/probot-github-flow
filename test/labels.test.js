@@ -1,12 +1,14 @@
 const { addLabels, removeLabels } = require('../lib/labels')
 
-const github = jest.fn()
-github.issues = jest.fn()
-github.issues.addLabels = jest.fn()
-github.issues.removeLabel = jest.fn()
+const github = {
+  issues: {
+    addLabels: jest.fn(),
+    removeLabel: jest.fn()
+  }
+}
 const owner = 'owner'
 const repo = 'repo'
-const number = 'number'
+const number = '1234'
 const labels = ['label1', 'label2']
 
 test('adds labels', async () => {

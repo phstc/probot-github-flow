@@ -11,3 +11,7 @@ test('returns fixable issues', () => {
     '5678'
   ])
 })
+
+test('returns empty when no fixable issues', () => {
+  expect(findFixableIssues('Hello World')).toEqual([])
+})
