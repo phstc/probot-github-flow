@@ -1,32 +1,12 @@
-const findFixableIssues = require('../lib/findFixableIssues')
+const findFixableIssues = require('./lib/findFixableIssues')
+const { addLabels, removeLabels } = require('./lib/labels')
 
 const READY_FOR_REVIEW = 'ready for review'
 const REJECTED = 'rejected'
 const REVIEW_REQUESTED = 'review requested'
 const IN_PROGRESS = 'in progress'
 
-const addLabels = async (github, owner, repo, number, labels) => {
-  await github.issues.addLabels({ owner, repo, number, labels })
-}
-
-const removeLabels = async (github, owner, repo, number, labels) => {
-  labels.forEach(async name => {
-    await github.issues.removeLabel({
-      owner,
-      repo,
-      number,
-      name
-    })
-  })
-}
-
 module.exports = robot => {
-  // For more information on building apps:
-  // https://probot.github.io/docs/
-
-  // To get your app running against GitHub, see:
-  // https://probot.github.io/docs/development/
-
   robot.on('issues.labeled', async context => {
     robot.log(context)
 
