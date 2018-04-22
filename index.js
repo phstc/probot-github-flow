@@ -8,8 +8,6 @@ const IN_PROGRESS = 'in progress'
 
 module.exports = robot => {
   robot.on('issues.labeled', async context => {
-    robot.log(context)
-
     switch (context.payload.label.name) {
       case READY_FOR_REVIEW:
         await removeLabels(
@@ -49,8 +47,6 @@ module.exports = robot => {
   })
 
   robot.on('issues.closed', async context => {
-    robot.log(context)
-
     await removeLabels(
       context.github,
       context.payload.repository.owner.login,
@@ -72,8 +68,6 @@ module.exports = robot => {
   )
 
   robot.on('pull_request.review_requested', async context => {
-    robot.log(context)
-
     findFixableIssues(context.payload.pull_request.body).forEach(
       async number => {
         await addLabels(
@@ -88,8 +82,6 @@ module.exports = robot => {
   })
 
   robot.on('pull_request_review', async context => {
-    robot.log(context)
-
     switch (context.payload.review.state) {
       case 'changes_requested':
         findFixableIssues(context.payload.pull_request.body).forEach(
