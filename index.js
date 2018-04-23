@@ -1,6 +1,7 @@
 const findFixableIssues = require('./lib/findFixableIssues')
 const { addLabels, removeLabels } = require('./lib/labels')
 const handlePullRequestClosed = require('./lib/handlePullRequestClosed')
+const handlePullRequestOpened = require('./lib/handlePullRequestOpened')
 const {
   IN_PROGRESS,
   READY_FOR_REVIEW,
@@ -59,7 +60,7 @@ module.exports = robot => {
   })
 
   robot.on('pull_request.closed', async context => {
-    handlePullRequestClosed(
+    await handlePullRequestClosed(
       context.github,
       context.payload.repository.owner.login,
       context.payload.repository.name,
@@ -70,12 +71,17 @@ module.exports = robot => {
   robot.on(
     ['pull_request.opened', 'pull_request.edited', 'pull_request.reopened'],
     async context => {
-      robot.log(context)
+      await handlePullRequestOpened(
+        context.github,
+        context.payload.repository.owner.login,
+        context.payload.repository.name,
+        context.payload.pull_request
+      )
     }
   )
 
   robot.on('pull_request.review_requested', async context => {
-    findFixableIssues(context.payload.pull_request.body).forEach(
+    await findFixableIssues(context.payload.pull_request.body).forEach(
       async number => {
         await addLabels(
           context.github,
@@ -91,7 +97,7 @@ module.exports = robot => {
   robot.on('pull_request_review', async context => {
     switch (context.payload.review.state) {
       case 'changes_requested':
-        findFixableIssues(context.payload.pull_request.body).forEach(
+        await findFixableIssues(context.payload.pull_request.body).forEach(
           async number => {
             await addLabels(
               context.github,
@@ -104,7 +110,7 @@ module.exports = robot => {
         )
         break
       case 'approved':
-        findFixableIssues(context.payload.pull_request.body).forEach(
+        await findFixableIssues(context.payload.pull_request.body).forEach(
           async number => {
             await removeLabels(
               context.github,
