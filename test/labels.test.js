@@ -11,8 +11,8 @@ const repo = 'repo'
 const number = '1234'
 const labels = ['label1', 'label2']
 
-test('adds labels', async () => {
-  addLabels(github, owner, repo, number, labels)
+test('add labels', async () => {
+  await addLabels(github, owner, repo, number, labels)
 
   expect(github.issues.addLabels).toBeCalledWith({
     owner,
@@ -22,8 +22,8 @@ test('adds labels', async () => {
   })
 })
 
-test('removes labels', async () => {
-  removeLabels(github, owner, repo, number, labels)
+test('remove labels', async () => {
+  await removeLabels(github, owner, repo, number, labels)
 
   labels.forEach(name => {
     expect(github.issues.removeLabel).toBeCalledWith({
