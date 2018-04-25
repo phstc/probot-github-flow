@@ -1,16 +1,9 @@
-const findFixableIssues = require('./lib/findFixableIssues')
-const { addLabels, removeLabels } = require('./lib/labels')
 const handlePullRequestClosed = require('./lib/handlePullRequestClosed')
 const handlePullRequestOpened = require('./lib/handlePullRequestOpened')
 const handleIssuesLabeled = require('./lib/handleIssuesLabeled')
 const handlePullRequestReviewRequested = require('./lib/handlePullRequestReviewRequested')
 const handlePullRequestReview = require('./lib/handlePullRequestReview')
-const {
-  IN_PROGRESS,
-  READY_FOR_REVIEW,
-  REVIEW_REQUESTED,
-  REJECTED
-} = require('./lib/constants')
+const handleIssuesClosed = require('./lib/handleIssuesClosed')
 
 module.exports = robot => {
   robot.on('issues.labeled', async context => {
@@ -24,12 +17,11 @@ module.exports = robot => {
   })
 
   robot.on('issues.closed', async context => {
-    await removeLabels(
+    await handleIssuesClosed(
       context.github,
       context.payload.repository.owner.login,
       context.payload.repository.name,
-      context.payload.issue.number,
-      [IN_PROGRESS, READY_FOR_REVIEW, REVIEW_REQUESTED]
+      context.payload.issue
     )
   })
 
