@@ -23,11 +23,11 @@ const github = {
   }
 }
 
-jest.mock('../lib/labels', () => ({
+jest.mock('../lib/issues', () => ({
   removeLabels: jest.fn()
 }))
 
-const { removeLabels } = require('../lib/labels')
+const { removeLabels } = require('../lib/issues')
 
 beforeEach(() => {
   removeLabels.mockReset()
@@ -40,7 +40,7 @@ test('merged pull request', async () => {
     body: `**PR:** #${pullRequest.number}`
   })
 
-  await handlePullRequestClosed(github, owner, repo, pullRequest)
+  await handlePullRequestClosed(github, owner, repo, { pullRequest })
 
   const labels = [IN_PROGRESS, READY_FOR_REVIEW, REVIEW_REQUESTED, REJECTED]
 
@@ -66,7 +66,7 @@ test('merged pull request', async () => {
 test('unmerged pull request', async () => {
   pullRequest.merged = false
 
-  await handlePullRequestClosed(github, owner, repo, pullRequest)
+  await handlePullRequestClosed(github, owner, repo, { pullRequest })
 
   expect(removeLabels).not.toBeCalled()
 

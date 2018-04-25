@@ -11,8 +11,7 @@ module.exports = robot => {
       context.github,
       context.payload.repository.owner.login,
       context.payload.repository.name,
-      context.payload.issue.number,
-      context.payload.label.name
+      context.payload
     )
   })
 
@@ -30,7 +29,7 @@ module.exports = robot => {
       context.github,
       context.payload.repository.owner.login,
       context.payload.repository.name,
-      context.payload.pull_request.body
+      context.payload
     )
   })
 
@@ -41,7 +40,7 @@ module.exports = robot => {
         context.github,
         context.payload.repository.owner.login,
         context.payload.repository.name,
-        context.payload.pull_request
+        context.payload
       )
     }
   )
@@ -51,7 +50,7 @@ module.exports = robot => {
       context.github,
       context.payload.repository.owner.login,
       context.payload.repository.name,
-      context.payload.pull_request.body
+      context.payload
     )
   })
 
@@ -60,8 +59,7 @@ module.exports = robot => {
       context.github,
       context.payload.repository.owner.login,
       context.payload.repository.name,
-      context.payload.pull_request,
-      context.payload.review
+      context.payload
     )
   })
 }

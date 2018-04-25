@@ -1,4 +1,4 @@
-const { addLabels, removeLabels } = require('../lib/labels')
+const { addLabels, removeLabels } = require('../lib/issues')
 
 const github = {
   issues: {
