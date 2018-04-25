@@ -2,6 +2,7 @@ const findFixableIssues = require('./lib/findFixableIssues')
 const { addLabels, removeLabels } = require('./lib/labels')
 const handlePullRequestClosed = require('./lib/handlePullRequestClosed')
 const handlePullRequestOpened = require('./lib/handlePullRequestOpened')
+const handleIssuesLabeled = require('./lib/handleIssuesLabeled')
 const {
   IN_PROGRESS,
   READY_FOR_REVIEW,
@@ -11,42 +12,13 @@ const {
 
 module.exports = robot => {
   robot.on('issues.labeled', async context => {
-    switch (context.payload.label.name) {
-      case READY_FOR_REVIEW:
-        await removeLabels(
-          context.github,
-          context.payload.repository.owner.login,
-          context.payload.repository.name,
-          context.payload.issue.number,
-          [IN_PROGRESS]
-        )
-        break
-      case REJECTED:
-        await removeLabels(
-          context.github,
-          context.payload.repository.owner.login,
-          context.payload.repository.name,
-          context.payload.issue.number,
-          [IN_PROGRESS, READY_FOR_REVIEW]
-        )
-        break
-      case REVIEW_REQUESTED:
-        await removeLabels(
-          context.github,
-          context.payload.repository.owner.login,
-          context.payload.repository.name,
-          context.payload.issue.number,
-          [IN_PROGRESS]
-        )
-        await addLabels(
-          context.github,
-          context.payload.repository.owner.login,
-          context.payload.repository.name,
-          context.payload.issue.number,
-          [READY_FOR_REVIEW]
-        )
-        break
-    }
+    await handleIssuesLabeled(
+      context.github,
+      context.payload.repository.owner.login,
+      context.payload.repository.name,
+      context.payload.issue.number,
+      context.payload.label.name
+    )
   })
 
   robot.on('issues.closed', async context => {
