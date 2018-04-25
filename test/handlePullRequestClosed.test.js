@@ -40,7 +40,9 @@ test('merged pull request', async () => {
     body: `**PR:** #${pullRequest.number}`
   })
 
-  await handlePullRequestClosed(github, owner, repo, { pullRequest })
+  await handlePullRequestClosed(github, owner, repo, {
+    pull_request: pullRequest
+  })
 
   const labels = [IN_PROGRESS, READY_FOR_REVIEW, REVIEW_REQUESTED, REJECTED]
 
@@ -66,7 +68,9 @@ test('merged pull request', async () => {
 test('unmerged pull request', async () => {
   pullRequest.merged = false
 
-  await handlePullRequestClosed(github, owner, repo, { pullRequest })
+  await handlePullRequestClosed(github, owner, repo, {
+    pull_request: pullRequest
+  })
 
   expect(removeLabels).not.toBeCalled()
 
