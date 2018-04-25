@@ -3,6 +3,7 @@ const { addLabels, removeLabels } = require('./lib/labels')
 const handlePullRequestClosed = require('./lib/handlePullRequestClosed')
 const handlePullRequestOpened = require('./lib/handlePullRequestOpened')
 const handleIssuesLabeled = require('./lib/handleIssuesLabeled')
+const handlePullRequestReviewRequested = require('./lib/handlePullRequestReviewRequested')
 const {
   IN_PROGRESS,
   READY_FOR_REVIEW,
@@ -53,16 +54,11 @@ module.exports = robot => {
   )
 
   robot.on('pull_request.review_requested', async context => {
-    await findFixableIssues(context.payload.pull_request.body).forEach(
-      async number => {
-        await addLabels(
-          context.github,
-          context.payload.repository.owner.login,
-          context.payload.repository.name,
-          number,
-          [REVIEW_REQUESTED]
-        )
-      }
+    await handlePullRequestReviewRequested(
+      context.github,
+      context.payload.repository.owner.login,
+      context.payload.repository.name,
+      context.payload.pull_request.body
     )
   })
 
