@@ -1,5 +1,4 @@
 const handlePullRequestClosed = require('../lib/handlePullRequestClosed')
-
 const {
   IN_PROGRESS,
   READY_FOR_REVIEW,

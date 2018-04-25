@@ -1,5 +1,4 @@
 const handleIssuesLabeled = require('../lib/handleIssuesLabeled')
-
 const {
   IN_PROGRESS,
   READY_FOR_REVIEW,
@@ -12,13 +11,7 @@ const repo = 'repo'
 const issue = {
   number: '5678'
 }
-
-const github = {
-  issues: {
-    get: jest.fn(),
-    edit: jest.fn()
-  }
-}
+const github = {}
 
 jest.mock('../lib/issues', () => ({
   removeLabels: jest.fn(),
