@@ -36,7 +36,9 @@ beforeEach(() => {
 
 test('merged pull request', async () => {
   github.issues.get.mockReturnValue({
-    body: `**PR:** #${pullRequest.number}`
+    data: {
+      body: `**PR:** #${pullRequest.number}`
+    }
   })
 
   await handlePullRequestClosed(github, owner, repo, {
