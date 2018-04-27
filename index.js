@@ -25,8 +25,8 @@ const wrapHandler = async (robot, targetHandler, context) => {
       )
     })
   } catch (error) {
-    robot.log.error(error)
     handleError(error)
+    throw error
   }
 }
 
