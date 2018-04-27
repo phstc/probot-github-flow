@@ -1,9 +1,9 @@
-const handleIssuesClosed = require('../lib/handleIssuesClosed')
+const handleIssuesClosed = require('../../lib/handleIssuesClosed')
 const {
   IN_PROGRESS,
   READY_FOR_REVIEW,
   REVIEW_REQUESTED
-} = require('../lib/constants')
+} = require('../../lib/utils/constants')
 
 const owner = 'owner'
 const repo = 'repo'
@@ -12,11 +12,11 @@ const issue = {
 }
 const github = {}
 
-jest.mock('../lib/issues', () => ({
+jest.mock('../../lib/utils/labels', () => ({
   removeLabels: jest.fn()
 }))
 
-const { removeLabels } = require('../lib/issues')
+const { removeLabels } = require('../../lib/utils/labels')
 
 beforeEach(() => {
   removeLabels.mockReset()

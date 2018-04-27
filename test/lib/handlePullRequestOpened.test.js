@@ -1,5 +1,5 @@
-const handlePullRequestOpened = require('../lib/handlePullRequestOpened')
-const { IN_PROGRESS, READY_FOR_REVIEW } = require('../lib/constants')
+const handlePullRequestOpened = require('../../lib/handlePullRequestOpened')
+const { IN_PROGRESS, READY_FOR_REVIEW } = require('../../lib/utils/constants')
 
 const owner = 'owner'
 const repo = 'repo'
@@ -21,11 +21,11 @@ const github = {
   }
 }
 
-jest.mock('../lib/issues', () => ({
+jest.mock('../../lib/utils/labels', () => ({
   addLabels: jest.fn()
 }))
 
-const { addLabels } = require('../lib/issues')
+const { addLabels } = require('../../lib/utils/labels')
 
 beforeEach(() => {
   addLabels.mockReset()

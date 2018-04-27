@@ -1,10 +1,10 @@
-const handlePullRequestClosed = require('../lib/handlePullRequestClosed')
+const handlePullRequestClosed = require('../../lib/handlePullRequestClosed')
 const {
   IN_PROGRESS,
   READY_FOR_REVIEW,
   REVIEW_REQUESTED,
   REJECTED
-} = require('../lib/constants')
+} = require('../../lib/utils/constants')
 
 const owner = 'owner'
 const repo = 'repo'
@@ -22,11 +22,11 @@ const github = {
   }
 }
 
-jest.mock('../lib/issues', () => ({
+jest.mock('../../lib/utils/labels', () => ({
   removeLabels: jest.fn()
 }))
 
-const { removeLabels } = require('../lib/issues')
+const { removeLabels } = require('../../lib/utils/labels')
 
 beforeEach(() => {
   removeLabels.mockReset()

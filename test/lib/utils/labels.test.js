@@ -1,9 +1,9 @@
-const { addLabels, removeLabels } = require('../lib/issues')
+const { addLabels, removeLabels } = require('../../../lib/utils/labels')
 
 const github = {
   issues: {
-    addLabels: jest.fn(),
-    removeLabel: jest.fn()
+    addLabels: jest.fn().mockReturnValue(Promise.resolve({})),
+    removeLabel: jest.fn().mockReturnValue(Promise.resolve({}))
   }
 }
 const owner = 'owner'

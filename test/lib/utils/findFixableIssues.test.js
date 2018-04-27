@@ -1,4 +1,4 @@
-const findFixableIssues = require('../lib/findFixableIssues')
+const findFixableIssues = require('../../../lib/utils/findFixableIssues')
 
 test('returns fixable issues', () => {
   expect(findFixableIssues('Closes #1234')).toEqual(['1234'])
