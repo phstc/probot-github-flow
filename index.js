@@ -5,6 +5,7 @@ const handleIssuesLabeled = require('./lib/handleIssuesLabeled')
 const handlePullRequestReviewRequested = require('./lib/handlePullRequestReviewRequested')
 const handlePullRequestReview = require('./lib/handlePullRequestReview')
 const handleIssuesClosed = require('./lib/handleIssuesClosed')
+const handleInstallation = require('./lib/handleInstallation')
 
 if (process.env.NODE_ENV === 'production') {
   rollbar.init(process.env.ROLLBAR_ACCESS_TOKEN)
@@ -98,14 +99,9 @@ module.exports = robot => {
     }
   })
 
-  robot.on('installation', async context => {
+  robot.on('installation.created', async context => {
     try {
-      await handleInstallation(
-        context.github,
-        context.payload.repository.owner.login,
-        context.payload.repository.name,
-        context.payload
-      )
+      await handleInstallation(context.github, context.payload)
     } catch (e) {
       handleError(e)
     }
