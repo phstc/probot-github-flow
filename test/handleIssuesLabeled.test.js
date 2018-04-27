@@ -1,10 +1,10 @@
-const handleIssuesLabeled = require('../../lib/handleIssuesLabeled')
+const handleIssuesLabeled = require('../lib/handleIssuesLabeled')
 const {
   IN_PROGRESS,
   READY_FOR_REVIEW,
   REVIEW_REQUESTED,
   REJECTED
-} = require('../../lib/utils/constants')
+} = require('../lib/utils/constants')
 
 const owner = 'owner'
 const repo = 'repo'
@@ -13,19 +13,19 @@ const issue = {
 }
 const github = {}
 
-jest.mock('../../lib/utils/labels', () => ({
+jest.mock('../lib/utils/labels', () => ({
   removeLabels: jest.fn(),
   addLabels: jest.fn()
 }))
 
-const { addLabels, removeLabels } = require('../../lib/utils/labels')
+const { addLabels, removeLabels } = require('../lib/utils/labels')
 
 beforeEach(() => {
   removeLabels.mockReset()
   addLabels.mockReset()
 })
 
-test('labeled with READY_FOR_REVIEW', async () => {
+test('labels with READY_FOR_REVIEW', async () => {
   await handleIssuesLabeled(github, owner, repo, {
     issue,
     label: { name: READY_FOR_REVIEW }
@@ -36,7 +36,7 @@ test('labeled with READY_FOR_REVIEW', async () => {
   ])
 })
 
-test('labeled with REJECTED', async () => {
+test('labels with REJECTED', async () => {
   await handleIssuesLabeled(github, owner, repo, {
     issue,
     label: { name: REJECTED }
@@ -48,7 +48,7 @@ test('labeled with REJECTED', async () => {
   ])
 })
 
-test('labeled with REVIEW_REQUESTED', async () => {
+test('labels with REVIEW_REQUESTED', async () => {
   await handleIssuesLabeled(github, owner, repo, {
     issue,
     label: { name: REVIEW_REQUESTED }

@@ -1,6 +1,6 @@
-const findFixableIssues = require('../../../lib/utils/findFixableIssues')
+const findFixableIssues = require('../../lib/utils/findFixableIssues')
 
-test('returns fixable issues', () => {
+test('returns issues', () => {
   expect(findFixableIssues('Closes #1234')).toEqual(['1234'])
   expect(
     findFixableIssues('Fix https://github.com/org/repo/issues/1234')
@@ -12,6 +12,6 @@ test('returns fixable issues', () => {
   ])
 })
 
-test('returns empty when no fixable issues', () => {
+test('returns no issues', () => {
   expect(findFixableIssues('Hello World')).toEqual([])
 })

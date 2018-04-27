@@ -1,5 +1,5 @@
-const handlePullRequestOpened = require('../../lib/handlePullRequestOpened')
-const { IN_PROGRESS, READY_FOR_REVIEW } = require('../../lib/utils/constants')
+const handlePullRequestOpened = require('../lib/handlePullRequestOpened')
+const { IN_PROGRESS, READY_FOR_REVIEW } = require('../lib/utils/constants')
 
 const owner = 'owner'
 const repo = 'repo'
@@ -21,11 +21,11 @@ const github = {
   }
 }
 
-jest.mock('../../lib/utils/labels', () => ({
+jest.mock('../lib/utils/labels', () => ({
   addLabels: jest.fn()
 }))
 
-const { addLabels } = require('../../lib/utils/labels')
+const { addLabels } = require('../lib/utils/labels')
 
 beforeEach(() => {
   addLabels.mockReset()
@@ -34,7 +34,7 @@ beforeEach(() => {
   github.issues.addAssigneesToIssue.mockReset()
 })
 
-test('skip closed issues', async () => {
+test('skips closed issues', async () => {
   const issue = { number: '1234', state: 'closed' }
   github.issues.get.mockReturnValue(issue)
 
@@ -48,7 +48,7 @@ test('skip closed issues', async () => {
   expect(addLabels).not.toBeCalled()
 })
 
-test('update issues with referenced pull requests', async () => {
+test('updates issues with the PR reference', async () => {
   const issue = { number: '1234', state: 'open', body: '', labels: [] }
   github.issues.get.mockReturnValue({ data: issue })
 
@@ -67,7 +67,7 @@ test('update issues with referenced pull requests', async () => {
   expect(github.issues.edit).toBeCalled()
 })
 
-test('do not set in_progress for ready for review', async () => {
+test('skips labeling with IN_PROGRESS', async () => {
   const issue = {
     number: '1234',
     state: 'open',

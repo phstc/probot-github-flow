@@ -1,4 +1,4 @@
-const { addLabels, removeLabels } = require('../../../lib/utils/labels')
+const { addLabels, removeLabels } = require('../../lib/utils/labels')
 
 const github = {
   issues: {
@@ -11,7 +11,7 @@ const repo = 'repo'
 const number = '1234'
 const labels = ['label1', 'label2']
 
-test('add labels', async () => {
+test('adds labels', async () => {
   await addLabels(github, owner, repo, number, labels)
 
   expect(github.issues.addLabels).toBeCalledWith({
@@ -22,7 +22,7 @@ test('add labels', async () => {
   })
 })
 
-test('remove labels', async () => {
+test('removes labels', async () => {
   await removeLabels(github, owner, repo, number, labels)
 
   labels.forEach(name => {

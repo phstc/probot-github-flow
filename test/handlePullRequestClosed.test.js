@@ -1,10 +1,10 @@
-const handlePullRequestClosed = require('../../lib/handlePullRequestClosed')
+const handlePullRequestClosed = require('../lib/handlePullRequestClosed')
 const {
   IN_PROGRESS,
   READY_FOR_REVIEW,
   REVIEW_REQUESTED,
   REJECTED
-} = require('../../lib/utils/constants')
+} = require('../lib/utils/constants')
 
 const owner = 'owner'
 const repo = 'repo'
@@ -22,11 +22,11 @@ const github = {
   }
 }
 
-jest.mock('../../lib/utils/labels', () => ({
+jest.mock('../lib/utils/labels', () => ({
   removeLabels: jest.fn()
 }))
 
-const { removeLabels } = require('../../lib/utils/labels')
+const { removeLabels } = require('../lib/utils/labels')
 
 beforeEach(() => {
   removeLabels.mockReset()
@@ -34,7 +34,7 @@ beforeEach(() => {
   github.issues.edit.mockReset()
 })
 
-test('merged pull request', async () => {
+test('closes issues and remove labels', async () => {
   github.issues.get.mockReturnValue({
     data: {
       body: `**PR:** #${pullRequest.number}`
@@ -66,7 +66,7 @@ test('merged pull request', async () => {
   })
 })
 
-test('unmerged pull request', async () => {
+test('strikes through PR reference', async () => {
   github.issues.get.mockReturnValue({
     data: {
       body: `**PR:** #${pullRequest.number}`

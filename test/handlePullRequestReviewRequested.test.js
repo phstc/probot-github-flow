@@ -1,5 +1,5 @@
-const handlePullRequestReviewRequested = require('../../lib/handlePullRequestReviewRequested')
-const { REVIEW_REQUESTED } = require('../../lib/utils/constants')
+const handlePullRequestReviewRequested = require('../lib/handlePullRequestReviewRequested')
+const { REVIEW_REQUESTED } = require('../lib/utils/constants')
 
 const owner = 'owner'
 const repo = 'repo'
@@ -11,17 +11,17 @@ const pullRequest = {
 }
 const github = {}
 
-jest.mock('../../lib/utils/labels', () => ({
+jest.mock('../lib/utils/labels', () => ({
   addLabels: jest.fn()
 }))
 
-const { addLabels } = require('../../lib/utils/labels')
+const { addLabels } = require('../lib/utils/labels')
 
 beforeEach(() => {
   addLabels.mockReset()
 })
 
-test('mark related issues with REVIEW_REQUESTED', async () => {
+test('labels with REVIEW_REQUESTED', async () => {
   await handlePullRequestReviewRequested(github, owner, repo, {
     pull_request: pullRequest
   })
