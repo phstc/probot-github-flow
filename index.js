@@ -101,7 +101,7 @@ module.exports = robot => {
 
   robot.on('installation.created', async context => {
     try {
-      await handleInstallation(context.github, context.payload)
+      // await handleInstallation(context.github, context.payload)
     } catch (e) {
       handleError(e)
     }
