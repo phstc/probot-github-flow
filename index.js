@@ -7,10 +7,17 @@ const handlePullRequestReview = require('./lib/handlePullRequestReview')
 const handleIssuesClosed = require('./lib/handleIssuesClosed')
 const handleSetup = require('./lib/handleSetup')
 
-const isProduction = () => process.env.NODE_ENV === 'production'
+const isRollbarEnabled = () =>
+  process.env.ROLLBAR_ACCESS_TOKEN && process.env.ROLLBAR_ACCESS_TOKEN !== ''
 
-if (isProduction()) {
+if (isRollbarEnabled()) {
   rollbar.init(process.env.ROLLBAR_ACCESS_TOKEN)
+}
+
+const handleError = error => {
+  if (isRollbarEnabled()) {
+    rollbar.handleError(error)
+  }
 }
 
 const wrapHandler = async (robot, targetHandler, context) => {
@@ -27,12 +34,6 @@ const wrapHandler = async (robot, targetHandler, context) => {
   } catch (error) {
     handleError(error)
     throw error
-  }
-}
-
-const handleError = e => {
-  if (isProduction()) {
-    rollbar.handleError(e)
   }
 }
 
