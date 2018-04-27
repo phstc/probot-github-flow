@@ -62,7 +62,7 @@ test('merged pull request', async () => {
     repo,
     number,
     body,
-    status: 'closed'
+    state: 'closed'
   })
 })
 
