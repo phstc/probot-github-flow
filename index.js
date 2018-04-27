@@ -13,7 +13,7 @@ if (isProduction()) {
   rollbar.init(process.env.ROLLBAR_ACCESS_TOKEN)
 }
 
-const wrapHandler = async (handler, context) => {
+const wrapHandler = async (robot, targetHandler, context) => {
   try {
     const handlers = [handleSetup, targetHandler]
     handlers.forEach(async handler => {
@@ -38,29 +38,29 @@ const handleError = e => {
 
 module.exports = robot => {
   robot.on('issues.labeled', async context => {
-    await wrapHandler(handleIssuesLabeled, context)
+    await wrapHandler(robot, handleIssuesLabeled, context)
   })
 
   robot.on('issues.closed', async context => {
-    await wrapHandler(handleIssuesClosed, context)
+    await wrapHandler(robot, handleIssuesClosed, context)
   })
 
   robot.on('pull_request.closed', async context => {
-    await wrapHandler(handlePullRequestClosed, context)
+    await wrapHandler(robot, handlePullRequestClosed, context)
   })
 
   robot.on(
     ['pull_request.opened', 'pull_request.edited', 'pull_request.reopened'],
     async context => {
-      await wrapHandler(handlePullRequestOpened, context)
+      await wrapHandler(robot, handlePullRequestOpened, context)
     }
   )
 
   robot.on('pull_request.review_requested', async context => {
-    await wrapHandler(handlePullRequestReviewRequested, context)
+    await wrapHandler(robot, handlePullRequestReviewRequested, context)
   })
 
   robot.on('pull_request_review', async context => {
-    await wrapHandler(handlePullRequestReview, context)
+    await wrapHandler(robot, handlePullRequestReview, context)
   })
 }
