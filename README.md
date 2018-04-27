@@ -17,5 +17,3 @@ See [docs/deploy.md](docs/deploy.md) if you would like to run your own instance 
 ## TODO
 
 * Improve tests https://probot.github.io/docs/testing/
-* Create labels
-
