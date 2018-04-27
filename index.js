@@ -1,4 +1,3 @@
-const rollbar = require('rollbar')
 const handlePullRequestClosed = require('./lib/handlePullRequestClosed')
 const handlePullRequestOpened = require('./lib/handlePullRequestOpened')
 const handleIssuesLabeled = require('./lib/handleIssuesLabeled')
@@ -6,19 +5,7 @@ const handlePullRequestReviewRequested = require('./lib/handlePullRequestReviewR
 const handlePullRequestReview = require('./lib/handlePullRequestReview')
 const handleIssuesClosed = require('./lib/handleIssuesClosed')
 const handleSetup = require('./lib/handleSetup')
-
-const isRollbarEnabled = () =>
-  process.env.ROLLBAR_ACCESS_TOKEN && process.env.ROLLBAR_ACCESS_TOKEN !== ''
-
-if (isRollbarEnabled()) {
-  rollbar.init(process.env.ROLLBAR_ACCESS_TOKEN)
-}
-
-const handleError = error => {
-  if (isRollbarEnabled()) {
-    rollbar.handleError(error)
-  }
-}
+const handleError = require('./lib/utils/handleError')
 
 const wrapHandler = async (robot, targetHandler, context) => {
   try {
