@@ -67,6 +67,11 @@ test('merged pull request', async () => {
 })
 
 test('unmerged pull request', async () => {
+  github.issues.get.mockReturnValue({
+    data: {
+      body: `**PR:** #${pullRequest.number}`
+    }
+  })
   pullRequest.merged = false
 
   await handlePullRequestClosed(github, owner, repo, {
@@ -75,7 +80,18 @@ test('unmerged pull request', async () => {
 
   expect(removeLabels).not.toBeCalled()
 
-  expect(github.issues.get).not.toBeCalled()
+  expect(github.issues.get).toBeCalledWith({
+    owner,
+    repo,
+    number
+  })
 
-  expect(github.issues.edit).not.toBeCalled()
+  const body = `<strike>**PR:** #${pullRequest.number}</strike>`
+
+  expect(github.issues.edit).toBeCalledWith({
+    owner,
+    repo,
+    number,
+    body
+  })
 })
