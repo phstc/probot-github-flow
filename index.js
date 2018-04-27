@@ -5,105 +5,62 @@ const handleIssuesLabeled = require('./lib/handleIssuesLabeled')
 const handlePullRequestReviewRequested = require('./lib/handlePullRequestReviewRequested')
 const handlePullRequestReview = require('./lib/handlePullRequestReview')
 const handleIssuesClosed = require('./lib/handleIssuesClosed')
-const handleInstallation = require('./lib/handleInstallation')
+const handleSetup = require('./lib/handleSetup')
 
-if (process.env.NODE_ENV === 'production') {
+const isProduction = () => process.env.NODE_ENV === 'production'
+
+if (isProduction()) {
   rollbar.init(process.env.ROLLBAR_ACCESS_TOKEN)
 }
 
+const wrapHandler = async (handler, context) => {
+  try {
+    const handlers = [handleSetup, targetHandler]
+    handlers.forEach(async handler => {
+      await handler(
+        context.github,
+        context.payload.repository.owner.login,
+        context.payload.repository.name,
+        context.payload
+      )
+    })
+  } catch (error) {
+    robot.log.error(error)
+    handleError(error)
+  }
+}
+
 const handleError = e => {
-  if (process.env.NODE_ENV === 'production') {
+  if (isProduction()) {
     rollbar.handleError(e)
   }
 }
 
 module.exports = robot => {
   robot.on('issues.labeled', async context => {
-    try {
-      await handleIssuesLabeled(
-        context.github,
-        context.payload.repository.owner.login,
-        context.payload.repository.name,
-        context.payload
-      )
-    } catch (e) {
-      handleError(e)
-    }
+    await wrapHandler(handleIssuesLabeled, context)
   })
 
   robot.on('issues.closed', async context => {
-    try {
-      await handleIssuesClosed(
-        context.github,
-        context.payload.repository.owner.login,
-        context.payload.repository.name,
-        context.payload.issue
-      )
-    } catch (e) {
-      handleError(e)
-    }
+    await wrapHandler(handleIssuesClosed, context)
   })
 
   robot.on('pull_request.closed', async context => {
-    try {
-      await handlePullRequestClosed(
-        context.github,
-        context.payload.repository.owner.login,
-        context.payload.repository.name,
-        context.payload
-      )
-    } catch (e) {
-      handleError(e)
-    }
+    await wrapHandler(handlePullRequestClosed, context)
   })
 
   robot.on(
     ['pull_request.opened', 'pull_request.edited', 'pull_request.reopened'],
     async context => {
-      try {
-        await handlePullRequestOpened(
-          context.github,
-          context.payload.repository.owner.login,
-          context.payload.repository.name,
-          context.payload
-        )
-      } catch (e) {
-        handleError(e)
-      }
+      await wrapHandler(handlePullRequestOpened, context)
     }
   )
 
   robot.on('pull_request.review_requested', async context => {
-    try {
-      await handlePullRequestReviewRequested(
-        context.github,
-        context.payload.repository.owner.login,
-        context.payload.repository.name,
-        context.payload
-      )
-    } catch (e) {
-      handleError(e)
-    }
+    await wrapHandler(handlePullRequestReviewRequested, context)
   })
 
   robot.on('pull_request_review', async context => {
-    try {
-      await handlePullRequestReview(
-        context.github,
-        context.payload.repository.owner.login,
-        context.payload.repository.name,
-        context.payload
-      )
-    } catch (e) {
-      handleError(e)
-    }
-  })
-
-  robot.on('installation.created', async context => {
-    try {
-      // await handleInstallation(context.github, context.payload)
-    } catch (e) {
-      handleError(e)
-    }
+    await wrapHandler(handlePullRequestReview, context)
   })
 }
