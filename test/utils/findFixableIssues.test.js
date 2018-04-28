@@ -10,6 +10,7 @@ test('returns issues', () => {
     '1234',
     '5678'
   ])
+  expect(findFixableIssues('Closes username/repository#1234')).toEqual(['1234'])
 })
 
 test('returns no issues', () => {
