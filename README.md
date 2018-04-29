@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/phstc/putslabel.svg?token=CYHU2osEpniE1dbxzZ6K&branch=master)](https://travis-ci.com/phstc/putslabel)
+
 # PutsLabel
 
 We use GitHub Issues for tracking features, bugs, enhancements etc, everything we change in the code, there's a referenced Issue, and for changing code, we create Pull requests.
