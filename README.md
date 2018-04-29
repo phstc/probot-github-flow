@@ -14,8 +14,6 @@ We use GitHub Issues for tracking features, bugs, enhancements etc, everything w
     2. If the Reviewer requests changes, PutsLabel labels the Issue with `rejected` and removes `ready for review`
 4.  Once the Pull request is merged, PutsLabel closes the Issue and removes the label `ready for review`, `rejected` and `review requested`
 
-> PutsLabel is built with [probot](https://github.com/probot/probot).
-
 ## Setup
 
 ```sh
@@ -33,3 +31,6 @@ yarn test
 ```
 
 See [docs/deploy.md](docs/deploy.md) if you would like to run your own instance of this app.
+
+> PutsLabel is built with [probot](https://github.com/probot/probot).
+
