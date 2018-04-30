@@ -17,3 +17,4 @@ This app requires these **Permissions & events** for the GitHub App:
 * Issues
 * Pull request review
 * Pull request review comment
+* Repository
