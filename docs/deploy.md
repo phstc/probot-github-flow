@@ -7,6 +7,7 @@ This app requires these **Permissions & events** for the GitHub App:
 ## Permissions
 
 * Issues - Ready & write
+* Repository contents - Ready & write (for deleting branches after merging/closing Pull requests)
 * Repository metadata - Read-only
 * Pull requests - Read & write
 
