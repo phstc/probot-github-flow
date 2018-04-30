@@ -12,13 +12,19 @@ const number = '1234'
 const pullRequest = {
   body: `Closes #${number}`,
   merged: true,
-  number: '5678'
+  number: '5678',
+  head: {
+    ref: 'my-branch'
+  }
 }
 
 const github = {
   issues: {
     get: jest.fn(),
     edit: jest.fn()
+  },
+  gitdata: {
+    deleteReference: jest.fn()
   }
 }
 
@@ -34,7 +40,7 @@ beforeEach(() => {
   github.issues.edit.mockReset()
 })
 
-test('closes issues and remove labels', async () => {
+test('closes issues, removes labels and deletes branch', async () => {
   github.issues.get.mockReturnValue({
     data: {
       body: `**PR:** #${pullRequest.number}`
@@ -43,6 +49,12 @@ test('closes issues and remove labels', async () => {
 
   await handlePullRequestClosed(github, owner, repo, {
     pull_request: pullRequest
+  })
+
+  expect(github.gitdata.deleteReference).toBeCalledWith({
+    owner,
+    repo,
+    ref: `heads/${pullRequest.head.ref}`
   })
 
   const labels = [IN_PROGRESS, READY_FOR_REVIEW, REVIEW_REQUESTED, REJECTED]
