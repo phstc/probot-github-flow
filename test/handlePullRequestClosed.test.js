@@ -91,7 +91,6 @@ xit('does not delete pull request', async () => {
     }
   })
 
-
   github.pullRequests.getAll.mockReturnValue({ data: [{ number: '5678' }] })
 
   await handlePullRequestClosed(github, owner, repo, {
@@ -107,7 +106,6 @@ it('strikes through PR reference', async () => {
       body: `**PR:** #${pullRequest.number}`
     }
   })
-
 
   github.pullRequests.getAll.mockReturnValue({ data: [] })
 
