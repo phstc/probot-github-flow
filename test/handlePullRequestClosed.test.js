@@ -25,6 +25,9 @@ const github = {
   },
   gitdata: {
     deleteReference: jest.fn()
+  },
+  pullRequests: {
+    getAll: jest.fn()
   }
 }
 
@@ -38,14 +41,17 @@ beforeEach(() => {
   removeLabels.mockReset()
   github.issues.get.mockReset()
   github.issues.edit.mockReset()
+  github.pullRequests.getAll.mockReset()
 })
 
-test('closes issues, removes labels and deletes branch', async () => {
+it('closes issues, removes labels and deletes branch', async () => {
   github.issues.get.mockReturnValue({
     data: {
       body: `**PR:** #${pullRequest.number}`
     }
   })
+
+  github.pullRequests.getAll.mockReturnValue([])
 
   await handlePullRequestClosed(github, owner, repo, {
     pull_request: pullRequest
@@ -78,12 +84,31 @@ test('closes issues, removes labels and deletes branch', async () => {
   })
 })
 
-test('strikes through PR reference', async () => {
+xit('does not delete pull request', async () => {
   github.issues.get.mockReturnValue({
     data: {
       body: `**PR:** #${pullRequest.number}`
     }
   })
+
+  github.pullRequests.getAll.mockReturnValue([{ number: '5678' }])
+
+  await handlePullRequestClosed(github, owner, repo, {
+    pull_request: pullRequest
+  })
+
+  expect(github.gitdata.deleteReference).not.toBeCalled()
+})
+
+it('strikes through PR reference', async () => {
+  github.issues.get.mockReturnValue({
+    data: {
+      body: `**PR:** #${pullRequest.number}`
+    }
+  })
+
+  github.pullRequests.getAll.mockReturnValue([])
+
   pullRequest.merged = false
 
   await handlePullRequestClosed(github, owner, repo, {
