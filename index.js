@@ -27,33 +27,33 @@ const wrapHandler = async (robot, targetHandler, context) => {
 
 module.exports = robot => {
   robot.on('issues.labeled', async context => {
-    await wrapHandler(robot, handleIssuesLabeled, context)
+    // await wrapHandler(robot, handleIssuesLabeled, context)
   })
 
   robot.on('issues.closed', async context => {
-    await wrapHandler(robot, handleIssuesClosed, context)
+    // await wrapHandler(robot, handleIssuesClosed, context)
   })
 
   robot.on('pull_request.closed', async context => {
-    await wrapHandler(robot, handlePullRequestClosed, context)
+    // await wrapHandler(robot, handlePullRequestClosed, context)
   })
 
   robot.on(
     ['pull_request.opened', 'pull_request.edited', 'pull_request.reopened'],
     async context => {
-      await wrapHandler(robot, handlePullRequestOpened, context)
+      // await wrapHandler(robot, handlePullRequestOpened, context)
     }
   )
 
   robot.on('pull_request.review_requested', async context => {
-    await wrapHandler(robot, handlePullRequestReviewRequested, context)
+    // await wrapHandler(robot, handlePullRequestReviewRequested, context)
   })
 
   robot.on('pull_request_review', async context => {
-    await wrapHandler(robot, handlePullRequestReview, context)
+    // await wrapHandler(robot, handlePullRequestReview, context)
   })
 
   robot.on('repository_vulnerability_alert.create', async context => {
-    await wrapHandler(robot, handleRepositoryVunerabilityAlertCreate, context)
+    // await wrapHandler(robot, handleRepositoryVunerabilityAlertCreate, context)
   })
 }
