@@ -31,7 +31,7 @@ module.exports = robot => {
   })
 
   robot.on('issues.closed', async context => {
-    // await wrapHandler(robot, handleIssuesClosed, context)
+    await wrapHandler(robot, handleIssuesClosed, context)
   })
 
   robot.on('pull_request.closed', async context => {
