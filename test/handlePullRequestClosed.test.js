@@ -51,7 +51,7 @@ it('closes issues, removes labels and deletes branch', async () => {
     }
   })
 
-  github.pullRequests.getAll.mockReturnValue([])
+  github.pullRequests.getAll.mockReturnValue({ data: [] })
 
   await handlePullRequestClosed(github, owner, repo, {
     pull_request: pullRequest
@@ -91,7 +91,8 @@ xit('does not delete pull request', async () => {
     }
   })
 
-  github.pullRequests.getAll.mockReturnValue([{ number: '5678' }])
+
+  github.pullRequests.getAll.mockReturnValue({ data: [{ number: '5678' }] })
 
   await handlePullRequestClosed(github, owner, repo, {
     pull_request: pullRequest
@@ -107,7 +108,8 @@ it('strikes through PR reference', async () => {
     }
   })
 
-  github.pullRequests.getAll.mockReturnValue([])
+
+  github.pullRequests.getAll.mockReturnValue({ data: [] })
 
   pullRequest.merged = false
 
