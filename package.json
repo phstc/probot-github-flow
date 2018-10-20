@@ -1,10 +1,10 @@
 {
-  "name": "putslabel",
+  "name": "github-flow",
   "version": "1.0.0",
   "description": "",
   "author": "Pablo Cantero <pablohstc@gmail.com>",
   "license": "ISC",
-  "repository": "https://github.com/phstc/putslabel.git",
+  "repository": "https://github.com/phstc/probot-github-flow.git",
   "scripts": {
     "dev": "nodemon --exec \"npm start\"",
     "start": "probot run ./index.js",

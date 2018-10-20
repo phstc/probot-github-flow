@@ -1,19 +1,19 @@
-[![Build Status](https://travis-ci.com/phstc/putslabel.svg?token=CYHU2osEpniE1dbxzZ6K&branch=master)](https://travis-ci.com/phstc/putslabel)
+[![Build Status](https://travis-ci.com/phstc/probot-github-flow.svg?token=CYHU2osEpniE1dbxzZ6K&branch=master)](https://travis-ci.com/phstc/probot-github-flow)
 
-# PutsLabel
+# GitHub Flow
 
-We use GitHub Issues for tracking features, bugs, enhancements etc, everything we change in the code, there's a referenced Issue, and for changing code, we create Pull requests.
+GitHub Flow based on Issues and Pull Requests.
 
 1.  File an Issue
 2.  Create a Pull request with `Fixes #issue-number` (or [any other closing keyword](https://help.github.com/articles/closing-issues-using-keywords/))
-    1.  PutsLabel labels the Issue with `in progress`,
+    1.  GitHub Flow labels the Issue with `in progress`,
     2.  adds the Pull request author as an Issue assignee
     3.  and updates the Issue description with `PR: #pull-request-number`.
 3.  Once your Pull request is ready for review, [ask for a Reviewer](https://help.github.com/articles/about-pull-request-reviews/)
-    1.  PutsLabel labels the Issue with `ready for review`, `review requested` and removes `in progress`
-    2.  If the Reviewer requests changes, PutsLabel labels the Issue with `rejected` and removes `ready for review`
+    1.  GitHub Flow labels the Issue with `ready for review`, `review requested` and removes `in progress`
+    2.  If the Reviewer requests changes, GitHub Flow labels the Issue with `rejected` and removes `ready for review`
 4.  Once the Pull request is merged,
-    1.  PutsLabel closes the Issue,
+    1.  GitHub Flow closes the Issue,
     2.  removes the label `ready for review`, `rejected` and `review requested`
     3.  and removes the Pull request branch.
 
