@@ -4,7 +4,6 @@ const handleIssuesLabeled = require('./lib/handleIssuesLabeled')
 const handlePullRequestReviewRequested = require('./lib/handlePullRequestReviewRequested')
 const handlePullRequestReview = require('./lib/handlePullRequestReview')
 const handleIssuesClosed = require('./lib/handleIssuesClosed')
-const handleRepositoryVunerabilityAlertCreate = require('./lib/handleRepositoryVunerabilityAlertCreate')
 const handleSetup = require('./lib/handleSetup')
 const handleError = require('./lib/utils/handleError')
 
@@ -51,9 +50,5 @@ module.exports = robot => {
 
   robot.on('pull_request_review', async context => {
     await wrapHandler(robot, handlePullRequestReview, context)
-  })
-
-  robot.on('repository_vulnerability_alert.create', async context => {
-    await wrapHandler(robot, handleRepositoryVunerabilityAlertCreate, context)
   })
 }
