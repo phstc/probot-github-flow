@@ -44,27 +44,7 @@ test('skips closed issues', async () => {
 
   expect(github.issues.get).toBeCalledWith({ owner, repo, number })
   expect(github.issues.addAssigneesToIssue).not.toBeCalled()
-  expect(github.issues.edit).not.toBeCalled()
   expect(addLabels).not.toBeCalled()
-})
-
-test('updates issues with the PR reference', async () => {
-  const issue = { number: '1234', state: 'open', body: '', labels: [] }
-  github.issues.get.mockReturnValue({ data: issue })
-
-  await handlePullRequestOpened(github, owner, repo, {
-    pull_request: pullRequest
-  })
-
-  expect(github.issues.get).toBeCalledWith({ owner, repo, number })
-  expect(github.issues.addAssigneesToIssue).toBeCalledWith({
-    owner,
-    repo,
-    number,
-    assignees: [pullRequest.user.login]
-  })
-  expect(addLabels).toBeCalledWith(github, owner, repo, number, [IN_PROGRESS])
-  expect(github.issues.edit).toBeCalled()
 })
 
 test('skips labeling with IN_PROGRESS', async () => {
@@ -88,5 +68,4 @@ test('skips labeling with IN_PROGRESS', async () => {
     assignees: [pullRequest.user.login]
   })
   expect(addLabels).not.toBeCalled()
-  expect(github.issues.edit).toBeCalled()
 })

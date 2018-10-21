@@ -47,7 +47,6 @@ beforeEach(() => {
 it('closes issues, removes labels and deletes branch', async () => {
   github.issues.get.mockReturnValue({
     data: {
-      body: `**PR:** #${pullRequest.number}`
     }
   })
 
@@ -72,16 +71,6 @@ it('closes issues, removes labels and deletes branch', async () => {
     repo,
     number
   })
-
-  const body = `<strike>**PR:** #${pullRequest.number}</strike>`
-
-  expect(github.issues.edit).toBeCalledWith({
-    owner,
-    repo,
-    number,
-    body,
-    state: 'closed'
-  })
 })
 
 xit('does not delete pull request', async () => {
@@ -98,37 +87,4 @@ xit('does not delete pull request', async () => {
   })
 
   expect(github.gitdata.deleteReference).not.toBeCalled()
-})
-
-it('strikes through PR reference', async () => {
-  github.issues.get.mockReturnValue({
-    data: {
-      body: `**PR:** #${pullRequest.number}`
-    }
-  })
-
-  github.pullRequests.getAll.mockReturnValue({ data: [] })
-
-  pullRequest.merged = false
-
-  await handlePullRequestClosed(github, owner, repo, {
-    pull_request: pullRequest
-  })
-
-  expect(removeLabels).not.toBeCalled()
-
-  expect(github.issues.get).toBeCalledWith({
-    owner,
-    repo,
-    number
-  })
-
-  const body = `<strike>**PR:** #${pullRequest.number}</strike>`
-
-  expect(github.issues.edit).toBeCalledWith({
-    owner,
-    repo,
-    number,
-    body
-  })
 })
