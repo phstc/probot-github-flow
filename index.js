@@ -9,7 +9,8 @@ const handleError = require('./lib/utils/handleError')
 
 const wrapHandler = async (robot, targetHandler, context) => {
   try {
-    const handlers = [handleSetup, targetHandler]
+    // const handlers = [handleSetup, targetHandler]
+    const handlers = [targetHandler]
     handlers.forEach(async handler => {
       await handler(
         context.github,
@@ -25,6 +26,10 @@ const wrapHandler = async (robot, targetHandler, context) => {
 }
 
 module.exports = robot => {
+  robot.on('installation_repositories.added', async context => {
+    await wrapHandler(robot, handleSetup, context)
+  })
+
   robot.on('issues.labeled', async context => {
     await wrapHandler(robot, handleIssuesLabeled, context)
   })
