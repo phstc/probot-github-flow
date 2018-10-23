@@ -1,5 +1,5 @@
 const handlePullRequestOpened = require('../lib/handlePullRequestOpened')
-const { IN_PROGRESS, READY_FOR_REVIEW } = require('../lib/utils/constants')
+const { READY_FOR_REVIEW } = require('../lib/utils/constants')
 
 const owner = 'owner'
 const repo = 'repo'
