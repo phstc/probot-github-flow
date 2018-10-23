@@ -8,7 +8,6 @@ GitHub Flow based on Issues and Pull Requests.
 2.  Create a Pull request with `Fixes #issue-number` (or [any other closing keyword](https://help.github.com/articles/closing-issues-using-keywords/))
     1.  GitHub Flow labels the Issue with `in progress`,
     2.  adds the Pull request author as an Issue assignee
-    3.  and updates the Issue description with `PR: #pull-request-number`.
 3.  Once your Pull request is ready for review, [ask for a Reviewer](https://help.github.com/articles/about-pull-request-reviews/)
     1.  GitHub Flow labels the Issue with `ready for review`, `review requested` and removes `in progress`
     2.  If the Reviewer requests changes, GitHub Flow labels the Issue with `rejected` and removes `ready for review`
