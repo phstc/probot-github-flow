@@ -34,4 +34,4 @@ yarn test
 
 See [docs/deploy.md](docs/deploy.md) if you would like to run your own instance of this app.
 
-> PutsLabel is built with [probot](https://github.com/probot/probot).
+> GitHub flow is built with [probot](https://github.com/probot/probot).
