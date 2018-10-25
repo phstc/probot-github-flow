@@ -4,7 +4,7 @@ const handleIssuesLabeled = require('./lib/handleIssuesLabeled')
 const handlePullRequestReviewRequested = require('./lib/handlePullRequestReviewRequested')
 const handlePullRequestReview = require('./lib/handlePullRequestReview')
 const handleIssuesClosed = require('./lib/handleIssuesClosed')
-const handleSetup = require('./lib/handleSetup')
+// const handleSetup = require('./lib/handleSetup')
 const handleError = require('./lib/utils/handleError')
 
 const wrapHandler = async (robot, targetHandler, context) => {
@@ -26,8 +26,14 @@ const wrapHandler = async (robot, targetHandler, context) => {
 }
 
 module.exports = robot => {
-  robot.on('installation_repositories.added', async context => {
-    await wrapHandler(robot, handleSetup, context)
+  robot.on('installation.created', async context => {
+    // TODO review this, it is not working:
+    // ERROR probot: {"message":"Resource not accessible by integration","documentation_url":"https://developer.github.com/v3/issues/labels/#create-a-label"}
+    // const owner = context.payload.installation.account.login
+    //
+    // context.payload.repositories.forEach(async (repo: any) => {
+    //   await handleSetup(context.github, owner, repo.name, context.payload)
+    // })
   })
 
   robot.on('issues.labeled', async context => {
